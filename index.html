@@ -76,6 +76,13 @@ h1{
     font-size:42px;
     margin-top:10px;
 }
+.title-box{
+    min-height:110px;      /* щоб картка не стрибала */
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:20px;
+}
 
 .footer{
     margin-top:35px;
@@ -127,7 +134,9 @@ small{
 <div class="sticker s5">🕯️</div>
 <div class="sticker s6">🥀</div>
 
-<h1 id="title"></h1>
+<div class="title-box">
+    <h1 id="title"></h1>
+</div>
 <div class="subtitle">
 Остання партія була <b>01.08.2026</b>
 </div>
