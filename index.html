@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Днів без D&D</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#202124;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    overflow:hidden;
+}
+
+body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.04), transparent 20%),
+        radial-gradient(circle at 80% 70%, rgba(255,255,255,.03), transparent 20%);
+}
+
+.card{
+    width:min(850px,95%);
+    background:#2b2b2b;
+    border:10px solid #555;
+    border-radius:18px;
+    box-shadow:0 20px 50px rgba(0,0,0,.5);
+    text-align:center;
+    padding:40px;
+    position:relative;
+}
+
+h1{
+    color:#ff5555;
+    font-size:48px;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:#bbb;
+    margin-bottom:30px;
+    font-size:22px;
+}
+
+.counter{
+    background:#111;
+    border:8px inset #777;
+    border-radius:12px;
+    padding:25px;
+    margin:25px 0;
+}
+
+#days{
+    font-size:120px;
+    color:#ff3b3b;
+    font-weight:bold;
+    text-shadow:
+        0 0 15px rgba(255,0,0,.4);
+}
+
+.label{
+    font-size:42px;
+    margin-top:10px;
+}
+
+.footer{
+    margin-top:35px;
+    color:#c8c8c8;
+    font-size:22px;
+    line-height:1.6;
+}
+
+.sticker{
+    position:absolute;
+    font-size:50px;
+    opacity:.85;
+    user-select:none;
+}
+
+.s1{top:18px;left:18px;transform:rotate(-20deg);}
+.s2{top:18px;right:25px;transform:rotate(18deg);}
+.s3{bottom:25px;left:35px;transform:rotate(-15deg);}
+.s4{bottom:30px;right:35px;transform:rotate(15deg);}
+.s5{top:45%;left:-15px;font-size:60px;}
+.s6{top:45%;right:-15px;font-size:60px;}
+
+.warning{
+    margin-top:25px;
+    background:#5a0000;
+    color:#fff;
+    padding:12px;
+    border-radius:8px;
+    font-weight:bold;
+    font-size:20px;
+}
+
+small{
+    display:block;
+    margin-top:15px;
+    color:#888;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="sticker s1">😭</div>
+<div class="sticker s2">🎲</div>
+<div class="sticker s3">💀</div>
+<div class="sticker s4">⚰️</div>
+<div class="sticker s5">🕯️</div>
+<div class="sticker s6">🥀</div>
+
+<h1 id="title"></h1>
+<div class="subtitle">
+Остання партія була <b>01.08.2026</b>
+</div>
+
+<div class="counter">
+<div id="days">0</div>
+<div class="label">днів без партії в D&D</div>
+</div>
+
+<div class="warning">
+⚠️ Рівень суму критичний.
+</div>
+
+<div class="footer">
+DM мовчить...<br>
+Гравці зайняті...<br>
+Кубики припадають пилом... 🎲
+</div>
+
+<small>
+"Maybe next weekend..." — вже вкотре.
+</small>
+
+</div>
+
+<script>
+    const titles = [
+    "🎲 МОНІТОРИНГ КРИТИЧНОЇ НЕСТАЧІ D&D",
+    "☠️ ЦЕНТР КОНТРОЛЮ D&D-ДЕФІЦИТУ",
+    "🪦 ДЕПАРТАМЕНТ ВІДСУТНОСТІ ПАРТІЙ",
+    "😭 ІНСТИТУТ ВИМИРАННЯ D&D",
+    "💀 НАЦІОНАЛЬНЕ БЮРО БЕЗ ПАРТІЙ",
+    "📉 СТАТИСТИКА ДЕГРАДАЦІЇ КАМПАНІЇ",
+    "⚠️ СИСТЕМА РАННЬОГО ПОПЕРЕДЖЕННЯ",
+    "🧙 МІНІСТЕРСТВО ВТРАЧЕНИХ ПРИГОД",
+
+    "📜 Державний реєстр непройдених сесій",
+    "🚨 Центр кризового реагування D&D",
+    "📊 Моніторинг активності пригодницької групи",
+    "🕵️ Комісія з розслідування зникнення DM",
+    "🧠 Служба контролю морального стану гравців",
+
+    "⚰️ Некролог кампанії",
+    "📖 Хроніка забутих пригод",
+    "🚪 Тут мала бути D&D-сесія",
+    "💤 Кампанія перебуває в комі",
+    "❤️‍🩹 Пульс кампанії: не виявлено",
+    "🏥 Реанімація кампанії",
+    "🎲 Кубики ще пам'ятають...",
+
+    "😭 Лічильник страждань",
+    "🥲 Сльозометр™",
+    "📉 D&D Abstinence Tracker",
+    "💻 DM.exe не відповідає",
+    "❌ 404: Session Not Found",
+    "🎲 Dice Withdrawal Monitor",
+    "🏛️ The Council Has Not Gathered",
+    "🙃 Roll Initiative... Nevermind"
+];
+
+document.getElementById("title").textContent =
+    titles[Math.floor(Math.random() * titles.length)];
+const lastGame = new Date(2026, 7, 1); // 1 серпня 2026 (місяці з 0)
+const today = new Date();
+
+lastGame.setHours(0,0,0,0);
+today.setHours(0,0,0,0);
+
+const diff = today - lastGame;
+const days = Math.floor(diff / (1000*60*60*24));
+
+document.getElementById("days").textContent = days;
+</script>
+
+</body>
+</html>
