@@ -4,124 +4,133 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Днів без D&D</title>
+<title>Очікування D&D</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-body{
-    background:#202124;
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-    overflow:hidden;
+body {
+    background: #0b132b;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
 }
 
-body::before{
-    content:"";
-    position:absolute;
-    inset:0;
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
     background:
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,.04), transparent 20%),
-        radial-gradient(circle at 80% 70%, rgba(255,255,255,.03), transparent 20%);
+        radial-gradient(circle at 20% 20%, rgba(255, 215, 0, .08), transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(91, 192, 190, .08), transparent 30%);
 }
 
-.card{
-    width:min(850px,95%);
-    background:#2b2b2b;
-    border:10px solid #555;
-    border-radius:18px;
-    box-shadow:0 20px 50px rgba(0,0,0,.5);
-    text-align:center;
-    padding:40px;
-    position:relative;
+.card {
+    width: min(850px, 95%);
+    background: #1c2541;
+    border: 10px solid #3a506b;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .6), 0 0 25px rgba(91, 192, 190, 0.2);
+    text-align: center;
+    padding: 40px;
+    position: relative;
+    z-index: 1;
 }
 
-h1{
-    color:#ff5555;
-    font-size:48px;
-    margin-bottom:10px;
+h1 {
+    color: #f4d35e;
+    font-size: 48px;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(244, 211, 94, 0.3);
 }
 
-.subtitle{
-    color:#bbb;
-    margin-bottom:30px;
-    font-size:22px;
+.subtitle {
+    color: #a9b4c2;
+    margin-bottom: 30px;
+    font-size: 22px;
 }
 
-.counter{
-    background:#111;
-    border:8px inset #777;
-    border-radius:12px;
-    padding:25px;
-    margin:25px 0;
+.subtitle b {
+    color: #fff;
 }
 
-#days{
-    font-size:120px;
-    color:#ff3b3b;
-    font-weight:bold;
-    text-shadow:
-        0 0 15px rgba(255,0,0,.4);
+.counter {
+    background: #0b132b;
+    border: 6px solid #5bc0be;
+    border-radius: 12px;
+    padding: 25px;
+    margin: 25px 0;
+    box-shadow: inset 0 0 15px rgba(91, 192, 190, 0.2);
 }
 
-.label{
-    font-size:42px;
-    margin-top:10px;
-}
-.title-box{
-    min-height:110px;      /* щоб картка не стрибала */
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-bottom:20px;
-    min-height:120px;
-    padding:0 70px;
-
+#days {
+    font-size: 120px;
+    color: #5bc0be;
+    font-weight: bold;
+    text-shadow: 0 0 20px rgba(91, 192, 190, 0.5);
 }
 
-.footer{
-    margin-top:35px;
-    color:#c8c8c8;
-    font-size:22px;
-    line-height:1.6;
+.label {
+    font-size: 38px;
+    margin-top: 10px;
+    color: #edf2f4;
 }
 
-.sticker{
-    position:absolute;
-    font-size:50px;
-    opacity:.85;
-    user-select:none;
+.title-box {
+    min-height: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 70px;
 }
 
-.s1{top:18px;left:18px;transform:rotate(-20deg);}
-.s2{top:18px;right:25px;transform:rotate(18deg);}
-.s3{bottom:25px;left:35px;transform:rotate(-15deg);}
-.s4{bottom:30px;right:35px;transform:rotate(15deg);}
-.s5{top:45%;left:-15px;font-size:60px;}
-.s6{top:45%;right:-15px;font-size:60px;}
-
-.warning{
-    margin-top:25px;
-    background:#5a0000;
-    color:#fff;
-    padding:12px;
-    border-radius:8px;
-    font-weight:bold;
-    font-size:20px;
+.footer {
+    margin-top: 35px;
+    color: #8d99ae;
+    font-size: 22px;
+    line-height: 1.6;
 }
 
-small{
-    display:block;
-    margin-top:15px;
-    color:#888;
+.sticker {
+    position: absolute;
+    font-size: 50px;
+    opacity: .9;
+    user-select: none;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+}
+
+.s1 { top: 18px; left: 18px; transform: rotate(-15deg); }
+.s2 { top: 18px; right: 25px; transform: rotate(15deg); }
+.s3 { bottom: 25px; left: 35px; transform: rotate(-20deg); }
+.s4 { bottom: 30px; right: 35px; transform: rotate(20deg); }
+.s5 { top: 45%; left: -15px; font-size: 60px; }
+.s6 { top: 45%; right: -15px; font-size: 60px; }
+
+.hype {
+    margin-top: 25px;
+    background: #004b23;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 20px;
+    box-shadow: 0 4px 15px rgba(0, 75, 35, 0.4);
+}
+
+small {
+    display: block;
+    margin-top: 20px;
+    color: #6c757d;
+    font-style: italic;
 }
 </style>
 </head>
@@ -130,88 +139,104 @@ small{
 
 <div class="card">
 
-<div class="sticker s1">😭</div>
-<div class="sticker s2">🎲</div>
-<div class="sticker s3">💀</div>
-<div class="sticker s4">⚰️</div>
-<div class="sticker s5">🕯️</div>
-<div class="sticker s6">🥀</div>
+<div class="sticker s1">✨</div>
+<div class="sticker s2">🐉</div>
+<div class="sticker s3">🗡️</div>
+<div class="sticker s4">🧙‍♂️</div>
+<div class="sticker s5">🛡️</div>
+<div class="sticker s6">🎲</div>
 
 <div class="title-box">
     <h1 id="title"></h1>
 </div>
 <div class="subtitle">
-Остання партія була <b>01.08.2026</b>
+Наступна партія відбудеться <b>29.08.2026</b>
 </div>
 
 <div class="counter">
-<div id="days">0</div>
-<div class="label">днів без партії в D&D</div>
+    <div id="days">0</div>
+    <div class="label" id="label-text">днів до наступної партії в D&D!</div>
 </div>
 
-<div class="warning">
-⚠️ Рівень суму критичний.
+<div class="hype">
+🔥 Пригода вже близько! Готуйте чарники!
 </div>
 
 <div class="footer">
-DM мовчить...<br>
-Гравці зайняті...<br>
-Кубики припадають пилом... 🎲
+DM готує епічні битви...<br>
+Гравці точать зброю...<br>
+Кубики заряджаються на натуральні 20! 🎲
 </div>
 
 <small>
-"Maybe next weekend..." — вже вкотре.
+"I would like to rage!" — вже зовсім скоро.
 </small>
 
 </div>
 
 <script>
-    const titles = [
-    "🎲 МОНІТОРИНГ КРИТИЧНОЇ НЕСТАЧІ D&D",
-    "☠️ ЦЕНТР КОНТРОЛЮ D&D-ДЕФІЦИТУ",
-    "🪦 ДЕПАРТАМЕНТ ВІДСУТНОСТІ ПАРТІЙ",
-    "😭 ІНСТИТУТ ВИМИРАННЯ D&D",
-    "💀 НАЦІОНАЛЬНЕ БЮРО БЕЗ ПАРТІЙ",
-    "📉 СТАТИСТИКА ДЕГРАДАЦІЇ КАМПАНІЇ",
-    "⚠️ СИСТЕМА РАННЬОГО ПОПЕРЕДЖЕННЯ",
-    "🧙 МІНІСТЕРСТВО ВТРАЧЕНИХ ПРИГОД",
-
-    "📜 Державний реєстр непройдених сесій",
-    "🚨 Центр кризового реагування D&D",
-    "📊 Моніторинг активності пригодницької групи",
-    "🕵️ Комісія з розслідування зникнення DM",
-    "🧠 Служба контролю морального стану гравців",
-
-    "⚰️ Некролог кампанії",
-    "📖 Хроніка забутих пригод",
-    "🚪 Тут мала бути D&D-сесія",
-    "💤 Кампанія перебуває в комі",
-    "❤️‍🩹 Пульс кампанії: не виявлено",
-    "🏥 Реанімація кампанії",
-    "🎲 Кубики ще пам'ятають...",
-
-    "😭 Лічильник страждань",
-    "🥲 Сльозометр™",
-    "📉 D&D Abstinence Tracker",
-    "💻 DM.exe не відповідає",
-    "❌ 404: Session Not Found",
-    "🎲 Dice Withdrawal Monitor",
-    "🏛️ The Council Has Not Gathered",
-    "🙃 Roll Initiative... Nevermind"
+const titles = [
+    // Епічні та пригодницькі
+    "🎲 ПІДГОТОВКА ДО ЕПІЧНОЇ ПРИГОДИ",
+    "✨ ІНСТИТУТ НАТУРАЛЬНИХ 20",
+    "🐉 ДЕПАРТАМЕНТ ОЧІКУВАННЯ ДРАКОНІВ",
+    "🧙‍♂️ МІНІСТЕРСТВО МАГІЧНИХ ЗБОРІВ",
+    "🛡️ АВАНГАРД НАСТУПНОЇ СЕСІЇ",
+    "🔥 ЦЕНТР НАКОПИЧЕННЯ МАНУ",
+    "📜 ВІДЛІК ДО НОВОЇ ГЛАВИ",
+    "⚔️ ГІЛЬДІЯ НЕТЕРПЛЯЧИХ ГЕРОЇВ",
+    "🍻 ТАВЕРНА В ОЧІКУВАННІ МАНДРІВНИКІВ",
+    "🏰 БРАМА ДО НЕЗВІДАНИХ СВІТІВ",
+    "🗺️ КАРТОГРАФІЯ НОВИХ ПРИГОД",
+    "🏕️ КОРОТКИЙ ВІДПОЧИНОК ПЕРЕД БОСОМ",
+    
+    // Ігрові механіки та кубики
+    "🚀 D&D HYPE TRACKER",
+    "⚡ ГЕНЕРАТОР УСПІШНИХ КИДКІВ",
+    "🍀 АГЕНТСТВО БОНУСНИХ ДІЙ",
+    "👁️ СЛУЖБА ПЕРЕВІРКИ УВАЖНОСТІ",
+    "📊 КОМІТЕТ З РОЗПОДІЛУ ДОСВІДУ (XP)",
+    "🔮 КРИШТАЛЕВА КУЛЯ ІНІЦІАТИВИ",
+    "🎒 ФОНД НЕРОЗПОДІЛЕНОГО ЛУТУ",
+    "💖 ЦЕНТР ВІДНОВЛЕННЯ ХІТПОЇНТІВ",
+    
+    // Смішні та мета-жарти
+    "⏳ РАДА З ПИТАНЬ УЗГОДЖЕННЯ ГРАФІКІВ",
+    "🍕 ДЕПАРТАМЕНТ ЗАМОВЛЕННЯ СМАКОЛИКІВ",
+    "🤯 ШТАБ-КВАРТИРА ІМПРОВІЗАЦІЇ DM-а",
+    "📝 АРХІВ ПРЕДІСТОРІЙ, ЯКІ НІХТО НЕ ЧИТАВ",
+    "🏃‍♂️ МІНІСТЕРСТВО ВТЕЧІ ВІД ГОБЛІНІВ",
+    "🎶 КОМІСІЯ З НАЛАШТУВАННЯ БАРДІВСЬКИХ ЛЮТЕНЬ",
+    "🧠 ЦЕНТР ГЕНЕРУВАННЯ БЕЗГЛУЗДИХ ІДЕЙ",
+    "🚨 СИСТЕМА ПОПЕРЕДЖЕННЯ ПРО TPK"
 ];
 
 document.getElementById("title").textContent =
     titles[Math.floor(Math.random() * titles.length)];
-const lastGame = new Date(2026, 7, 1); // 1 серпня 2026 (місяці з 0)
+
+// Цільова дата: 29 серпня 2026 (місяці з 0, тому 7 = серпень)
+const nextGame = new Date(2026, 7, 29); 
 const today = new Date();
 
-lastGame.setHours(0,0,0,0);
+nextGame.setHours(0,0,0,0);
 today.setHours(0,0,0,0);
 
-const diff = today - lastGame;
+const diff = nextGame - today;
 const days = Math.floor(diff / (1000*60*60*24));
 
-document.getElementById("days").textContent = days;
+const daysElement = document.getElementById("days");
+const labelElement = document.getElementById("label-text");
+
+if (days > 0) {
+    daysElement.textContent = days;
+} else if (days === 0) {
+    daysElement.textContent = "СЬОГОДНІ!";
+    daysElement.style.fontSize = "70px";
+    labelElement.textContent = "ЧАС КИДАТИ ІНІЦІАТИВУ!";
+} else {
+    daysElement.textContent = "🎉";
+    labelElement.textContent = "ГРА ВЖЕ ПОЧАЛАСЯ (АБО ПРОЙШЛА)!";
+}
 </script>
 
 </body>
