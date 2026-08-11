@@ -16,64 +16,62 @@ body::before {
                 radial-gradient(circle at 80% 70%, rgba(91, 192, 190, .08), transparent 30%);
 }
 .card {
-    width: min(850px, 95%); background: #1c2541; border: 10px solid #3a506b;
+    width: min(850px, 100%); background: #1c2541; border: 10px solid #3a506b;
     border-radius: 18px; box-shadow: 0 20px 50px rgba(0, 0, 0, .6), 0 0 25px rgba(91, 192, 190, 0.2);
     text-align: center; padding: 40px; position: relative; z-index: 1;
 }
 h1 { color: #f4d35e; font-size: clamp(28px, 5vw, 48px); margin-bottom: 10px; text-shadow: 0 2px 10px rgba(244, 211, 94, 0.3); }
-.subtitle { color: #a9b4c2; margin-bottom: 20px; font-size: 22px; }
+.subtitle { color: #a9b4c2; margin-bottom: 20px; font-size: clamp(16px, 4vw, 22px); line-height: 1.4; }
 .subtitle b { color: #fff; }
 
 .counter {
     background: #0b132b; border: 6px solid #5bc0be; border-radius: 12px;
     padding: 25px; margin: 25px 0; box-shadow: inset 0 0 15px rgba(91, 192, 190, 0.2);
 }
-#days { font-size: clamp(60px, 10vw, 120px); color: #5bc0be; font-weight: bold; text-shadow: 0 0 20px rgba(91, 192, 190, 0.5); }
-.label { font-size: clamp(20px, 4vw, 38px); margin-top: 10px; color: #edf2f4; }
+#days { font-size: clamp(60px, 10vw, 120px); color: #5bc0be; font-weight: bold; text-shadow: 0 0 20px rgba(91, 192, 190, 0.5); line-height: 1; }
+.label { font-size: clamp(18px, 4vw, 38px); margin-top: 10px; color: #edf2f4; }
 
 .calendar-box {
     margin-top: 30px; background: #0b132b; border: 2px solid #5bc0be;
     border-radius: 12px; padding: 20px; text-align: left;
 }
-.calendar-box h3 { color: #f4d35e; text-align: center; margin-bottom: 15px; font-size: 24px; }
-.session-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; border-bottom: 1px solid #3a506b; }
+.calendar-box h3 { color: #f4d35e; text-align: center; margin-bottom: 15px; font-size: clamp(20px, 4vw, 24px); }
+
+.session-item { 
+    display: flex; justify-content: space-between; align-items: center; 
+    padding: 12px 15px; border-bottom: 1px solid #3a506b; gap: 15px;
+}
 .session-item:last-child { border-bottom: none; }
-.session-date { font-weight: bold; color: #5bc0be; font-size: 18px; white-space: nowrap; margin-right: 15px; }
-.session-desc { color: #a9b4c2; font-style: italic; text-align: right; }
+.session-date { font-weight: bold; color: #5bc0be; font-size: 18px; flex-shrink: 0; }
+.session-desc { color: #a9b4c2; font-style: italic; text-align: right; overflow-wrap: break-word; word-break: break-word; }
 .session-item.next-game { background: rgba(91, 192, 190, 0.1); border-radius: 8px; border: 1px solid rgba(91, 192, 190, 0.3); }
 
-.hype { margin-top: 25px; background: #004b23; color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 20px; box-shadow: 0 4px 15px rgba(0, 75, 35, 0.4); }
+.hype { margin-top: 25px; background: #004b23; color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; font-size: clamp(16px, 4vw, 20px); box-shadow: 0 4px 15px rgba(0, 75, 35, 0.4); }
 .loader { color: #5bc0be; font-style: italic; text-align: center; }
 
 /* СТІКЕРИ НА КАРТЦІ */
-.sticker { position: absolute; font-size: clamp(30px, 5vw, 50px); opacity: .9; user-select: none; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
+.sticker { position: absolute; font-size: clamp(30px, 5vw, 50px); opacity: .9; user-select: none; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); z-index: -1; }
 .s1 { top: 18px; left: 18px; transform: rotate(-15deg); }
 .s2 { top: 18px; right: 25px; transform: rotate(15deg); }
 .s3 { bottom: 25px; left: 35px; transform: rotate(-20deg); }
 .s4 { bottom: 30px; right: 35px; transform: rotate(20deg); }
 
-/* ========================================= */
-/* НОВИЙ КАЛЕНДАР (ВИПЛИВАЄ СПРАВА)          */
-/* ========================================= */
-
-/* Кнопка відкриття календаря */
+/* БІЧНИЙ КАЛЕНДАР */
 .cal-toggle-btn {
     position: fixed; top: 50%; right: 0; transform: translateY(-50%);
     background: #5bc0be; color: #0b132b; border: none;
     padding: 15px 20px 15px 25px; border-radius: 30px 0 0 30px;
-    font-size: 28px; cursor: pointer; z-index: 100;
+    font-size: clamp(20px, 5vw, 28px); cursor: pointer; z-index: 100;
     box-shadow: -5px 0 15px rgba(91,192,190,0.4); transition: 0.3s ease;
 }
 .cal-toggle-btn:hover { background: #f4d35e; box-shadow: -5px 0 20px rgba(244,211,94,0.6); padding-right: 35px; }
 
-/* Темний фон, коли відкрита панель */
 .sidebar-overlay {
     position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
     opacity: 0; pointer-events: none; transition: 0.4s; z-index: 101;
 }
 .sidebar-overlay.active { opacity: 1; pointer-events: all; }
 
-/* Бічна панель */
 .sidebar {
     position: fixed; top: 0; right: -450px; width: min(400px, 100%); height: 100vh;
     background: #151d33; box-shadow: -10px 0 40px rgba(0,0,0,0.8);
@@ -84,21 +82,20 @@ h1 { color: #f4d35e; font-size: clamp(28px, 5vw, 48px); margin-bottom: 10px; tex
 .sidebar.active { right: 0; }
 
 .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.sidebar-header h2 { color: #f4d35e; font-size: 24px; }
-.close-btn { background: none; border: none; color: #a9b4c2; font-size: 30px; cursor: pointer; transition: 0.2s; }
+.sidebar-header h2 { color: #f4d35e; font-size: clamp(20px, 5vw, 24px); }
+.close-btn { background: none; border: none; color: #a9b4c2; font-size: 35px; line-height: 1; cursor: pointer; transition: 0.2s; }
 .close-btn:hover { color: #ff5555; transform: scale(1.1); }
 
-/* Сітка візуального календаря */
 .month-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 .month-controls button { background: rgba(91,192,190,0.1); border: 1px solid #5bc0be; color: #5bc0be; border-radius: 8px; padding: 5px 12px; font-size: 18px; cursor: pointer; transition: 0.2s; }
 .month-controls button:hover { background: #5bc0be; color: #0b132b; }
-.month-title { font-size: 20px; font-weight: bold; color: #edf2f4; text-transform: capitalize;}
+.month-title { font-size: clamp(16px, 4vw, 20px); font-weight: bold; color: #edf2f4; text-transform: capitalize;}
 
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
-.cal-day-name { color: #8d99ae; font-size: 14px; font-weight: bold; padding-bottom: 5px; }
+.cal-day-name { color: #8d99ae; font-size: clamp(12px, 3vw, 14px); font-weight: bold; padding-bottom: 5px; }
 .cal-cell { 
     aspect-ratio: 1; display: flex; justify-content: center; align-items: center; 
-    border-radius: 8px; background: rgba(255,255,255,0.03); font-size: 16px; 
+    border-radius: 8px; background: rgba(255,255,255,0.03); font-size: clamp(14px, 4vw, 16px); 
     position: relative; transition: 0.2s;
 }
 .cal-cell.empty { background: transparent; }
@@ -109,29 +106,119 @@ h1 { color: #f4d35e; font-size: clamp(28px, 5vw, 48px); margin-bottom: 10px; tex
 }
 .cal-cell.session:hover { background: #f4d35e; color: #0b132b; transform: scale(1.1); z-index: 2; box-shadow: 0 0 15px rgba(244,211,94,0.5);}
 
-/* Деталі вибраної гри */
 .session-details-box {
     margin-top: 25px; padding: 15px; background: rgba(0,0,0,0.3);
     border-radius: 8px; border-left: 4px solid #5bc0be; min-height: 80px;
 }
 .detail-date { font-weight: bold; color: #5bc0be; font-size: 18px; margin-bottom: 8px; }
-.detail-desc { color: #a9b4c2; font-style: italic; line-height: 1.4; }
-.no-selection { color: #6c757d; font-style: italic; display: flex; height: 100%; align-items: center; justify-content: center; }
+.detail-desc { color: #a9b4c2; font-style: italic; line-height: 1.4; overflow-wrap: break-word; }
+.no-selection { color: #6c757d; font-style: italic; display: flex; height: 100%; align-items: center; justify-content: center; text-align: center; }
 
+/* ОПТИМІЗАЦІЯ ПІД МОБІЛЬНІ ПРИСТРОЇ */
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { padding: 25px 15px; border-width: 5px; }
+    .session-item { flex-direction: column; align-items: flex-start; gap: 5px; }
+    .session-desc { text-align: left; width: 100%; }
+    .sidebar { padding: 20px 15px; border-left: none; }
+    .cal-toggle-btn { padding: 12px 15px 12px 20px; }
+    
+    /* ХОВАЄМО КНОПКУ ПАСХАЛКИ НА МОБІЛКАХ */
+    .devops-easter-egg { display: none !important; }
+}
+
+/* ========================================= */
+/* ⚠️ РЕЖИМ СТАРОГО ВЕБ-САЙТУ 2000-Х (ПАСХАЛКА) */
+/* ========================================= */
+.devops-easter-egg {
+    position: fixed; bottom: 5px; right: 8px;
+    color: rgba(255,255,255,0.3); /* Майже прозора */
+    font-size: 12px; cursor: pointer; z-index: 9999;
+    user-select: none; transition: 0.3s;
+}
+.devops-easter-egg:hover { color: rgba(255,255,255,0.4); }
+
+body.devops-mode {
+    background: #c0c0c0 !important; /* Старий віндовий сірий фон */
+}
+body.devops-mode::before { display: none; }
+body.devops-mode * {
+    font-family: "Times New Roman", Times, serif !important;
+    text-shadow: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+body.devops-mode .card {
+    background: #ffffff !important;
+    border: 4px inset #ffffff !important; /* Страшна рамка */
+}
+body.devops-mode h1 { 
+    color: #0000FF !important; /* Вирвиоко синій */
+    text-decoration: underline !important;
+}
+body.devops-mode .subtitle { color: #000 !important; font-weight: bold !important; }
+body.devops-mode .counter { 
+    background: #ffffff !important; 
+    border: 2px solid #000000 !important; 
+}
+body.devops-mode #days { color: #FF0000 !important; font-size: 80px !important; } /* Страшний червоний */
+body.devops-mode .label { color: #000000 !important; }
+body.devops-mode .calendar-box { 
+    background: #ffffff !important; 
+    border: 2px dashed #0000FF !important; 
+}
+body.devops-mode h3 { color: #000000 !important; text-decoration: underline; }
+body.devops-mode .session-item { border-bottom: 1px solid #000 !important; }
+body.devops-mode .session-date { color: #0000FF !important; }
+body.devops-mode .session-desc { color: #000 !important; font-style: normal !important; }
+body.devops-mode .session-item.next-game { background: #FFFF00 !important; border: 1px solid #000 !important; } /* Жовтий маркер */
+body.devops-mode .sticker { display: none !important; }
+body.devops-mode .hype {
+    background: #FFFF00 !important;
+    border: 2px solid #FF0000 !important;
+    color: #FF0000 !important;
+    text-align: center !important;
+}
+body.devops-mode .cal-toggle-btn {
+    background: #c0c0c0 !important;
+    border: 3px outset #ffffff !important;
+    color: #000 !important;
+    padding: 10px !important;
+    font-size: 16px !important;
+    right: 5px !important;
+}
+body.devops-mode .sidebar {
+    background: #c0c0c0 !important;
+    border-left: 4px inset #ffffff !important;
+}
+body.devops-mode .sidebar-header h2 { color: #0000FF !important; }
+body.devops-mode .close-btn {
+    color: #000 !important;
+    background: #c0c0c0 !important;
+    border: 2px outset #ffffff !important;
+    font-size: 18px !important;
+    padding: 2px 8px !important;
+}
+body.devops-mode .cal-day-name { color: #000 !important; }
+body.devops-mode .cal-cell { border: 1px solid #808080 !important; color: #000 !important; background: #fff !important;}
+body.devops-mode .cal-cell.today { border: 2px solid #FF0000 !important; }
+body.devops-mode .cal-cell.session { background: #FFFF00 !important; color: #0000FF !important; text-decoration: underline; }
+body.devops-mode .session-details-box { background: #fff !important; border: 2px inset #fff !important; color: #000 !important; }
+body.devops-mode .detail-date { color: #0000FF !important; }
+body.devops-mode .detail-desc { color: #000 !important; }
 </style>
 </head>
 <body>
 
-<!-- Кнопка відкриття панелі -->
-<button class="cal-toggle-btn" id="openSidebarBtn" title="Відкрити календар">📅</button>
+<!-- Кнопка Великоднє Яйце -->
+<div class="devops-easter-egg" id="devopsBtn" title="devops mode">devops</div>
 
-<!-- Затемнення фону -->
+<button class="cal-toggle-btn" id="openSidebarBtn" title="Відкрити календар">📅</button>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- Бічна панель з візуальним календарем -->
 <div class="sidebar" id="calendarSidebar">
     <div class="sidebar-header">
-        <h2>🗺️ Карта подій</h2>
+        <h2 id="sidebarTitle">🗺️ Карта подій</h2>
         <button class="close-btn" id="closeSidebarBtn">×</button>
     </div>
     
@@ -141,21 +228,15 @@ h1 { color: #f4d35e; font-size: clamp(28px, 5vw, 48px); margin-bottom: 10px; tex
         <button id="nextMonthBtn">▶</button>
     </div>
 
-    <div class="cal-grid" id="calGrid">
-        <!-- Сюди JS згенерує календар -->
-    </div>
+    <div class="cal-grid" id="calGrid"></div>
 
     <div class="session-details-box" id="sessionDetails">
-        <div class="no-selection">👈 Натисни на підсвічену дату, щоб побачити деталі сесії</div>
+        <div class="no-selection" id="sidebarHelperText">👈 Натисни на підсвічену дату, щоб побачити деталі сесії</div>
     </div>
 </div>
 
-<!-- ОСНОВНА КАРТКА -->
 <div class="card">
-    <div class="sticker s1">✨</div>
-    <div class="sticker s2">🐉</div>
-    <div class="sticker s3">🗡️</div>
-    <div class="sticker s4">🎲</div>
+
 
     <div><h1 id="title">🎲 ПІДГОТОВКА ДО ЕПІЧНОЇ ПРИГОДИ</h1></div>
     
@@ -167,56 +248,28 @@ h1 { color: #f4d35e; font-size: clamp(28px, 5vw, 48px); margin-bottom: 10px; tex
     </div>
 
     <div class="calendar-box">
-        <h3>📅 Найближчі плани</h3>
+        <h3 id="calHeader">📅 Найближчі плани</h3>
         <div id="calendar-list" class="loader">Читаємо стародавні сувої (завантаження...)</div>
     </div>
 
-    <div class="hype">🔥 Пригода вже близько! Готуйте чарники!</div>
+    <div class="hype" id="hypeMsg">🔥 Пригода вже близько! Готуйте чарники!</div>
 </div>
 
 <script>
 const DATA_URL = "https://gist.githubusercontent.com/vladik2312/e1aeab68d4a4a9def64b6f6eef914ac0/raw/schedule.txt";
 
 const titles = [
-    // Епічні та пригодницькі
-    "🎲 ПІДГОТОВКА ДО ЕПІЧНОЇ ПРИГОДИ",
-    "✨ ІНСТИТУТ НАТУРАЛЬНИХ 20",
-    "🐉 ДЕПАРТАМЕНТ ОЧІКУВАННЯ ДРАКОНІВ",
-    "🧙‍♂️ МІНІСТЕРСТВО МАГІЧНИХ ЗБОРІВ",
-    "🛡️ АВАНГАРД НАСТУПНОЇ СЕСІЇ",
-    "🔥 ЦЕНТР НАКОПИЧЕННЯ МАНУ",
-    "📜 ВІДЛІК ДО НОВОЇ ГЛАВИ",
-    "⚔️ ГІЛЬДІЯ НЕТЕРПЛЯЧИХ ГЕРОЇВ",
-    "🍻 ТАВЕРНА В ОЧІКУВАННІ МАНДРІВНИКІВ",
-    "🏰 БРАМА ДО НЕЗВІДАНИХ СВІТІВ",
-    "🗺️ КАРТОГРАФІЯ НОВИХ ПРИГОД",
-    "🏕️ КОРОТКИЙ ВІДПОЧИНОК ПЕРЕД БОСОМ",
-    
-    // Ігрові механіки та кубики
-    "🚀 D&D HYPE TRACKER",
-    "⚡ ГЕНЕРАТОР УСПІШНИХ КИДКІВ",
-    "🍀 АГЕНТСТВО БОНУСНИХ ДІЙ",
-    "👁️ СЛУЖБА ПЕРЕВІРКИ УВАЖНОСТІ",
-    "📊 КОМІТЕТ З РОЗПОДІЛУ ДОСВІДУ (XP)",
-    "🔮 КРИШТАЛЕВА КУЛЯ ІНІЦІАТИВИ",
-    "🎒 ФОНД НЕРОЗПОДІЛЕНОГО ЛУТУ",
-    "💖 ЦЕНТР ВІДНОВЛЕННЯ ХІТПОЇНТІВ",
-    
-    // Смішні та мета-жарти
-    "⏳ РАДА З ПИТАНЬ УЗГОДЖЕННЯ ГРАФІКІВ",
-    "🍕 ДЕПАРТАМЕНТ ЗАМОВЛЕННЯ СМАКОЛИКІВ",
-    "🤯 ШТАБ-КВАРТИРА ІМПРОВІЗАЦІЇ DM-а",
-    "📝 АРХІВ ПРЕДІСТОРІЙ, ЯКІ НІХТО НЕ ЧИТАВ",
-    "🏃‍♂️ МІНІСТЕРСТВО ВТЕЧІ ВІД ГОБЛІНІВ",
-    "🎶 КОМІСІЯ З НАЛАШТУВАННЯ БАРДІВСЬКИХ ЛЮТЕНЬ",
-    "🧠 ЦЕНТР ГЕНЕРУВАННЯ БЕЗГЛУЗДИХ ІДЕЙ",
-    "🚨 СИСТЕМА ПОПЕРЕДЖЕННЯ ПРО TPK"
+    "🎲 ПІДГОТОВКА ДО ЕПІЧНОЇ ПРИГОДИ", "✨ ІНСТИТУТ НАТУРАЛЬНИХ 20",
+    "🐉 ДЕПАРТАМЕНТ ОЧІКУВАННЯ ДРАКОНІВ", "🧙‍♂️ МІНІСТЕРСТВО МАГІЧНИХ ЗБОРІВ",
+    "🚀 D&D HYPE TRACKER", "🏰 БРАМА ДО НЕЗВІДАНИХ СВІТІВ",
+    "🏕️ КОРОТКИЙ ВІДПОЧИНОК ПЕРЕД БОСОМ"
 ];
-document.getElementById("title").textContent = titles[Math.floor(Math.random() * titles.length)];
 
-// Глобальні змінні для збереження всіх ігор
 let allSessions = [];
-let currentCalDate = new Date(); // Місяць, який зараз показується в бічній панелі
+let currentCalDate = new Date(); 
+let isDevopsMode = false;
+
+document.getElementById("title").textContent = titles[Math.floor(Math.random() * titles.length)];
 
 async function loadSchedule() {
     try {
@@ -250,11 +303,8 @@ async function loadSchedule() {
         const today = new Date();
         today.setHours(0,0,0,0);
         
-        // Відображаємо тільки майбутні ігри на головній картці
         const futureSessions = allSessions.filter(s => s.dateObj >= today);
         renderMainCard(futureSessions, today);
-
-        // Будуємо візуальний календар на поточний місяць
         buildVisualCalendar();
 
     } catch (error) {
@@ -270,13 +320,15 @@ function renderMainCard(sessions, today) {
 
     if (sessions.length === 0) {
         document.getElementById("target-date-display").innerHTML = "<b>Дати невідомі... DM пішов у туман.</b>";
-        document.getElementById("days").textContent = "∞";
+        document.getElementById("days").textContent = "NaN";
         calendarList.innerHTML = "<div class='session-item'>Запланованих ігор поки немає 😭</div>";
         return;
     }
 
     const nextGame = sessions[0];
-    document.getElementById("target-date-display").innerHTML = `Наступна партія: <b>${nextGame.dateStr}</b> <br> <small style="color:#a9b4c2">(${nextGame.descStr})</small>`;
+    document.getElementById("target-date-display").innerHTML = isDevopsMode 
+        ? `[ UNDER CONSTRUCTION ] <br> NEXT GAME: ${nextGame.dateStr}` 
+        : `Наступна партія: <b>${nextGame.dateStr}</b> <br> <small style="color:#a9b4c2">(${nextGame.descStr})</small>`;
     
     const diff = nextGame.dateObj - today;
     const days = Math.floor(diff / (1000*60*60*24));
@@ -287,40 +339,33 @@ function renderMainCard(sessions, today) {
     if (days > 0) {
         daysElement.textContent = days;
     } else if (days === 0) {
-        daysElement.textContent = "СЬОГОДНІ!";
+        daysElement.textContent = isDevopsMode ? "NOW" : "СЬОГОДНІ!";
         daysElement.style.fontSize = "clamp(40px, 8vw, 70px)";
-        labelElement.textContent = "ЧАС КИДАТИ ІНІЦІАТИВУ!";
+        labelElement.textContent = isDevopsMode ? "EXECUTE()" : "ЧАС КИДАТИ ІНІЦІАТИВУ!";
     }
 
-    // Показуємо макс 3 найближчі гри в списку (щоб не перевантажувати)
     sessions.slice(0, 3).forEach((session, index) => {
         const item = document.createElement("div");
         item.className = "session-item" + (index === 0 ? " next-game" : "");
         item.innerHTML = `
-            <div class="session-date">${index === 0 ? '🔥 ' : '📅 '}${session.dateStr}</div>
+            <div class="session-date">${isDevopsMode ? '' : (index === 0 ? '🔥 ' : '📅 ')}${session.dateStr}</div>
             <div class="session-desc">${session.descStr}</div>
         `;
         calendarList.appendChild(item);
     });
 }
 
-// ==========================================
-// ЛОГІКА ВІЗУАЛЬНОГО КАЛЕНДАРЯ
-// ==========================================
-
 const monthNames = ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"];
 
 function buildVisualCalendar() {
     const grid = document.getElementById("calGrid");
-    grid.innerHTML = ""; // Очищаємо
+    grid.innerHTML = ""; 
 
     const year = currentCalDate.getFullYear();
     const month = currentCalDate.getMonth();
 
-    // Заголовок
     document.getElementById("monthTitle").textContent = `${monthNames[month]} ${year}`;
 
-    // Дні тижня
     const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
     daysOfWeek.forEach(d => {
         const el = document.createElement("div");
@@ -329,34 +374,26 @@ function buildVisualCalendar() {
         grid.appendChild(el);
     });
 
-    // Математика календаря
     const firstDayIndex = new Date(year, month, 1).getDay(); 
-    // У JS неділя - це 0. Робимо понеділок - 0, неділя - 6.
     const startDay = firstDayIndex === 0 ? 6 : firstDayIndex - 1; 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    // Сьогоднішня дата для підсвітки
     const today = new Date();
 
-    // Порожні клітинки до початку місяця
     for (let i = 0; i < startDay; i++) {
         const emptyCell = document.createElement("div");
         emptyCell.className = "cal-cell empty";
         grid.appendChild(emptyCell);
     }
 
-    // Дні місяця
     for (let i = 1; i <= daysInMonth; i++) {
         const cell = document.createElement("div");
         cell.className = "cal-cell";
         cell.textContent = i;
 
-        // Перевіряємо чи це сьогодні
         if (year === today.getFullYear() && month === today.getMonth() && i === today.getDate()) {
             cell.classList.add("today");
         }
 
-        // Перевіряємо чи є на цей день гра
         const sessionForThisDay = allSessions.find(s => 
             s.dateObj.getFullYear() === year && 
             s.dateObj.getMonth() === month && 
@@ -365,12 +402,11 @@ function buildVisualCalendar() {
 
         if (sessionForThisDay) {
             cell.classList.add("session");
-            cell.title = sessionForThisDay.descStr; // підказка при наведенні
+            cell.title = sessionForThisDay.descStr; 
             
-            // Клік по даті з грою -> показуємо деталі внизу
             cell.onclick = () => {
                 document.getElementById("sessionDetails").innerHTML = `
-                    <div class="detail-date">🎲 ${sessionForThisDay.dateStr}</div>
+                    <div class="detail-date">${isDevopsMode ? '' : '🎲'} ${sessionForThisDay.dateStr}</div>
                     <div class="detail-desc">${sessionForThisDay.descStr}</div>
                 `;
             };
@@ -380,7 +416,6 @@ function buildVisualCalendar() {
     }
 }
 
-// Кнопки перемикання місяців
 document.getElementById("prevMonthBtn").addEventListener("click", () => {
     currentCalDate.setMonth(currentCalDate.getMonth() - 1);
     buildVisualCalendar();
@@ -390,9 +425,6 @@ document.getElementById("nextMonthBtn").addEventListener("click", () => {
     buildVisualCalendar();
 });
 
-// ==========================================
-// ЛОГІКА БІЧНОЇ ПАНЕЛІ (ВІДКРИТИ/ЗАКРИТИ)
-// ==========================================
 const sidebar = document.getElementById("calendarSidebar");
 const overlay = document.getElementById("sidebarOverlay");
 const openBtn = document.getElementById("openSidebarBtn");
@@ -401,9 +433,8 @@ const closeBtn = document.getElementById("closeSidebarBtn");
 function openSidebar() {
     sidebar.classList.add("active");
     overlay.classList.add("active");
-    // При відкритті скидаємо текст знизу
-    document.getElementById("sessionDetails").innerHTML = `<div class="no-selection">👈 Натисни на золоту дату, щоб побачити деталі сесії</div>`;
-    // Фокусуємо календар на місяці, коли буде НАСТУПНА гра (якщо є)
+    document.getElementById("sessionDetails").innerHTML = `<div class="no-selection" id="sidebarHelperText">${isDevopsMode ? 'Click link to view event.' : '👈 Натисни на золоту дату, щоб побачити деталі сесії'}</div>`;
+    
     const today = new Date();
     const nextGame = allSessions.find(s => s.dateObj >= today);
     if (nextGame) {
@@ -419,9 +450,44 @@ function closeSidebar() {
 
 openBtn.addEventListener("click", openSidebar);
 closeBtn.addEventListener("click", closeSidebar);
-overlay.addEventListener("click", closeSidebar); // Закриття по кліку на темний фон
+overlay.addEventListener("click", closeSidebar); 
 
-// Запуск
+// ==========================================
+// ЛОГІКА ДЛЯ ПАСХАЛКИ (UGLY 2000s MODE)
+// ==========================================
+document.getElementById("devopsBtn").addEventListener("click", () => {
+    isDevopsMode = !isDevopsMode;
+    document.body.classList.toggle("devops-mode");
+    
+    if (isDevopsMode) {
+        // Дизайн старого інтернету + жарт
+        document.getElementById("title").innerHTML = "<marquee>Welcome to Voland's Webzone!!!</marquee>";
+        document.getElementById("hypeMsg").innerHTML = "<marquee scrollamount='20'>ERROR: D&D session blocked.</marquee>";
+        document.getElementById("openSidebarBtn").textContent = "Open Calendar";
+        document.getElementById("sidebarTitle").textContent = "Calendar Applet v1.0";
+        document.getElementById("calHeader").textContent = "Upcoming Events List";
+        if (document.getElementById("sidebarHelperText")) {
+            document.getElementById("sidebarHelperText").textContent = "Click link to view event.";
+        }
+    } else {
+        // Повертаємо магію
+        document.getElementById("title").innerHTML = titles[Math.floor(Math.random() * titles.length)];
+        document.getElementById("hypeMsg").innerHTML = "🔥 Пригода вже близько! Готуйте чарники!";
+        document.getElementById("openSidebarBtn").textContent = "📅";
+        document.getElementById("sidebarTitle").textContent = "🗺️ Карта подій";
+        document.getElementById("calHeader").textContent = "📅 Найближчі плани";
+        if (document.getElementById("sidebarHelperText")) {
+            document.getElementById("sidebarHelperText").textContent = "👈 Натисни на золоту дату, щоб побачити деталі сесії";
+        }
+    }
+    
+    // Перемальовуємо дані, щоб зникли/з'явилися емодзі
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const futureSessions = allSessions.filter(s => s.dateObj >= today);
+    renderMainCard(futureSessions, today);
+});
+
 loadSchedule();
 </script>
 
