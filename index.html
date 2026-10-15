@@ -1,495 +1,978 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Очікування D&D</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-body {
-    background: #0b132b; color: white; display: flex; justify-content: center;
-    align-items: center; min-height: 100vh; overflow-x: hidden; padding: 20px;
-}
-body::before {
-    content: ""; position: fixed; inset: 0; z-index: -1;
-    background: radial-gradient(circle at 20% 20%, rgba(255, 215, 0, .08), transparent 30%),
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Очікування D&D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0b132b;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 20%, rgba(255, 215, 0, .08), transparent 30%),
                 radial-gradient(circle at 80% 70%, rgba(91, 192, 190, .08), transparent 30%);
-}
-.card {
-    width: min(850px, 100%); background: #1c2541; border: 10px solid #3a506b;
-    border-radius: 18px; box-shadow: 0 20px 50px rgba(0, 0, 0, .6), 0 0 25px rgba(91, 192, 190, 0.2);
-    text-align: center; padding: 40px; position: relative; z-index: 1;
-}
-h1 { color: #f4d35e; font-size: clamp(28px, 5vw, 48px); margin-bottom: 10px; text-shadow: 0 2px 10px rgba(244, 211, 94, 0.3); }
-.subtitle { color: #a9b4c2; margin-bottom: 20px; font-size: clamp(16px, 4vw, 22px); line-height: 1.4; }
-.subtitle b { color: #fff; }
+        }
 
-.counter {
-    background: #0b132b; border: 6px solid #5bc0be; border-radius: 12px;
-    padding: 25px; margin: 25px 0; box-shadow: inset 0 0 15px rgba(91, 192, 190, 0.2);
-}
-#days { font-size: clamp(60px, 10vw, 120px); color: #5bc0be; font-weight: bold; text-shadow: 0 0 20px rgba(91, 192, 190, 0.5); line-height: 1; }
-.label { font-size: clamp(18px, 4vw, 38px); margin-top: 10px; color: #edf2f4; }
+        .card {
+            width: min(850px, 100%);
+            background: #1c2541;
+            border: 10px solid #3a506b;
+            border-radius: 18px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .6), 0 0 25px rgba(91, 192, 190, 0.2);
+            text-align: center;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
 
-.calendar-box {
-    margin-top: 30px; background: #0b132b; border: 2px solid #5bc0be;
-    border-radius: 12px; padding: 20px; text-align: left;
-}
-.calendar-box h3 { color: #f4d35e; text-align: center; margin-bottom: 15px; font-size: clamp(20px, 4vw, 24px); }
+        h1 {
+            color: #f4d35e;
+            font-size: clamp(28px, 5vw, 48px);
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(244, 211, 94, 0.3);
+        }
 
-.session-item { 
-    display: flex; justify-content: space-between; align-items: center; 
-    padding: 12px 15px; border-bottom: 1px solid #3a506b; gap: 15px;
-}
-.session-item:last-child { border-bottom: none; }
-.session-date { font-weight: bold; color: #5bc0be; font-size: 18px; flex-shrink: 0; }
-.session-desc { color: #a9b4c2; font-style: italic; text-align: right; overflow-wrap: break-word; word-break: break-word; }
-.session-item.next-game { background: rgba(91, 192, 190, 0.1); border-radius: 8px; border: 1px solid rgba(91, 192, 190, 0.3); }
+        .subtitle {
+            color: #a9b4c2;
+            margin-bottom: 20px;
+            font-size: clamp(16px, 4vw, 22px);
+            line-height: 1.4;
+        }
 
-.hype { margin-top: 25px; background: #004b23; color: #fff; padding: 12px; border-radius: 8px; font-weight: bold; font-size: clamp(16px, 4vw, 20px); box-shadow: 0 4px 15px rgba(0, 75, 35, 0.4); }
-.loader { color: #5bc0be; font-style: italic; text-align: center; }
+        .subtitle b {
+            color: #fff;
+        }
 
-/* СТІКЕРИ НА КАРТЦІ */
-.sticker { position: absolute; font-size: clamp(30px, 5vw, 50px); opacity: .9; user-select: none; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); z-index: -1; }
-.s1 { top: 18px; left: 18px; transform: rotate(-15deg); }
-.s2 { top: 18px; right: 25px; transform: rotate(15deg); }
-.s3 { bottom: 25px; left: 35px; transform: rotate(-20deg); }
-.s4 { bottom: 30px; right: 35px; transform: rotate(20deg); }
+        .counter {
+            background: #0b132b;
+            border: 6px solid #5bc0be;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: inset 0 0 15px rgba(91, 192, 190, 0.2);
+        }
 
-/* БІЧНИЙ КАЛЕНДАР */
-.cal-toggle-btn {
-    position: fixed; top: 50%; right: 0; transform: translateY(-50%);
-    background: #5bc0be; color: #0b132b; border: none;
-    padding: 15px 20px 15px 25px; border-radius: 30px 0 0 30px;
-    font-size: clamp(20px, 5vw, 28px); cursor: pointer; z-index: 100;
-    box-shadow: -5px 0 15px rgba(91,192,190,0.4); transition: 0.3s ease;
-}
-.cal-toggle-btn:hover { background: #f4d35e; box-shadow: -5px 0 20px rgba(244,211,94,0.6); padding-right: 35px; }
+        #days {
+            font-size: clamp(60px, 10vw, 120px);
+            color: #5bc0be;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(91, 192, 190, 0.5);
+            line-height: 1;
+        }
 
-.sidebar-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
-    opacity: 0; pointer-events: none; transition: 0.4s; z-index: 101;
-}
-.sidebar-overlay.active { opacity: 1; pointer-events: all; }
+        .label {
+            font-size: clamp(18px, 4vw, 38px);
+            margin-top: 10px;
+            color: #edf2f4;
+        }
 
-.sidebar {
-    position: fixed; top: 0; right: -450px; width: min(400px, 100%); height: 100vh;
-    background: #151d33; box-shadow: -10px 0 40px rgba(0,0,0,0.8);
-    z-index: 102; transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    padding: 30px; display: flex; flex-direction: column;
-    border-left: 2px solid #5bc0be; overflow-y: auto;
-}
-.sidebar.active { right: 0; }
+        .calendar-box {
+            margin-top: 30px;
+            background: #0b132b;
+            border: 2px solid #5bc0be;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+        }
 
-.sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.sidebar-header h2 { color: #f4d35e; font-size: clamp(20px, 5vw, 24px); }
-.close-btn { background: none; border: none; color: #a9b4c2; font-size: 35px; line-height: 1; cursor: pointer; transition: 0.2s; }
-.close-btn:hover { color: #ff5555; transform: scale(1.1); }
+        .calendar-box h3 {
+            color: #f4d35e;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: clamp(20px, 4vw, 24px);
+        }
 
-.month-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-.month-controls button { background: rgba(91,192,190,0.1); border: 1px solid #5bc0be; color: #5bc0be; border-radius: 8px; padding: 5px 12px; font-size: 18px; cursor: pointer; transition: 0.2s; }
-.month-controls button:hover { background: #5bc0be; color: #0b132b; }
-.month-title { font-size: clamp(16px, 4vw, 20px); font-weight: bold; color: #edf2f4; text-transform: capitalize;}
+        .session-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #3a506b;
+            gap: 15px;
+        }
 
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
-.cal-day-name { color: #8d99ae; font-size: clamp(12px, 3vw, 14px); font-weight: bold; padding-bottom: 5px; }
-.cal-cell { 
-    aspect-ratio: 1; display: flex; justify-content: center; align-items: center; 
-    border-radius: 8px; background: rgba(255,255,255,0.03); font-size: clamp(14px, 4vw, 16px); 
-    position: relative; transition: 0.2s;
-}
-.cal-cell.empty { background: transparent; }
-.cal-cell.today { border: 2px solid #8d99ae; color: #fff; }
-.cal-cell.session { 
-    background: rgba(244,211,94,0.15); color: #f4d35e; font-weight: bold; 
-    border: 1px solid #f4d35e; cursor: pointer; box-shadow: 0 0 10px rgba(244,211,94,0.2); 
-}
-.cal-cell.session:hover { background: #f4d35e; color: #0b132b; transform: scale(1.1); z-index: 2; box-shadow: 0 0 15px rgba(244,211,94,0.5);}
+        .session-item:last-child {
+            border-bottom: none;
+        }
 
-.session-details-box {
-    margin-top: 25px; padding: 15px; background: rgba(0,0,0,0.3);
-    border-radius: 8px; border-left: 4px solid #5bc0be; min-height: 80px;
-}
-.detail-date { font-weight: bold; color: #5bc0be; font-size: 18px; margin-bottom: 8px; }
-.detail-desc { color: #a9b4c2; font-style: italic; line-height: 1.4; overflow-wrap: break-word; }
-.no-selection { color: #6c757d; font-style: italic; display: flex; height: 100%; align-items: center; justify-content: center; text-align: center; }
+        .session-date {
+            font-weight: bold;
+            color: #5bc0be;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
 
-/* ОПТИМІЗАЦІЯ ПІД МОБІЛЬНІ ПРИСТРОЇ */
-@media (max-width: 600px) {
-    body { padding: 10px; }
-    .card { padding: 25px 15px; border-width: 5px; }
-    .session-item { flex-direction: column; align-items: flex-start; gap: 5px; }
-    .session-desc { text-align: left; width: 100%; }
-    .sidebar { padding: 20px 15px; border-left: none; }
-    .cal-toggle-btn { padding: 12px 15px 12px 20px; }
-    
-    /* ХОВАЄМО КНОПКУ ПАСХАЛКИ НА МОБІЛКАХ */
-    .devops-easter-egg { display: none !important; }
-}
+        .session-desc {
+            color: #a9b4c2;
+            font-style: italic;
+            text-align: right;
+            overflow-wrap: break-word;
+            word-break: break-word;
+        }
 
-/* ========================================= */
-/* ⚠️ РЕЖИМ СТАРОГО ВЕБ-САЙТУ 2000-Х (ПАСХАЛКА) */
-/* ========================================= */
-.devops-easter-egg {
-    position: fixed; bottom: 5px; right: 8px;
-    color: rgba(255,255,255,0.3); /* Майже прозора */
-    font-size: 12px; cursor: pointer; z-index: 9999;
-    user-select: none; transition: 0.3s;
-}
-.devops-easter-egg:hover { color: rgba(255,255,255,0.4); }
+        .session-item.next-game {
+            background: rgba(91, 192, 190, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(91, 192, 190, 0.3);
+        }
 
-body.devops-mode {
-    background: #c0c0c0 !important; /* Старий віндовий сірий фон */
-}
-body.devops-mode::before { display: none; }
-body.devops-mode * {
-    font-family: "Times New Roman", Times, serif !important;
-    text-shadow: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-}
-body.devops-mode .card {
-    background: #ffffff !important;
-    border: 4px inset #ffffff !important; /* Страшна рамка */
-}
-body.devops-mode h1 { 
-    color: #0000FF !important; /* Вирвиоко синій */
-    text-decoration: underline !important;
-}
-body.devops-mode .subtitle { color: #000 !important; font-weight: bold !important; }
-body.devops-mode .counter { 
-    background: #ffffff !important; 
-    border: 2px solid #000000 !important; 
-}
-body.devops-mode #days { color: #FF0000 !important; font-size: 80px !important; } /* Страшний червоний */
-body.devops-mode .label { color: #000000 !important; }
-body.devops-mode .calendar-box { 
-    background: #ffffff !important; 
-    border: 2px dashed #0000FF !important; 
-}
-body.devops-mode h3 { color: #000000 !important; text-decoration: underline; }
-body.devops-mode .session-item { border-bottom: 1px solid #000 !important; }
-body.devops-mode .session-date { color: #0000FF !important; }
-body.devops-mode .session-desc { color: #000 !important; font-style: normal !important; }
-body.devops-mode .session-item.next-game { background: #FFFF00 !important; border: 1px solid #000 !important; } /* Жовтий маркер */
-body.devops-mode .sticker { display: none !important; }
-body.devops-mode .hype {
-    background: #FFFF00 !important;
-    border: 2px solid #FF0000 !important;
-    color: #FF0000 !important;
-    text-align: center !important;
-}
-body.devops-mode .cal-toggle-btn {
-    background: #c0c0c0 !important;
-    border: 3px outset #ffffff !important;
-    color: #000 !important;
-    padding: 10px !important;
-    font-size: 16px !important;
-    right: 5px !important;
-}
-body.devops-mode .sidebar {
-    background: #c0c0c0 !important;
-    border-left: 4px inset #ffffff !important;
-}
-body.devops-mode .sidebar-header h2 { color: #0000FF !important; }
-body.devops-mode .close-btn {
-    color: #000 !important;
-    background: #c0c0c0 !important;
-    border: 2px outset #ffffff !important;
-    font-size: 18px !important;
-    padding: 2px 8px !important;
-}
-body.devops-mode .cal-day-name { color: #000 !important; }
-body.devops-mode .cal-cell { border: 1px solid #808080 !important; color: #000 !important; background: #fff !important;}
-body.devops-mode .cal-cell.today { border: 2px solid #FF0000 !important; }
-body.devops-mode .cal-cell.session { background: #FFFF00 !important; color: #0000FF !important; text-decoration: underline; }
-body.devops-mode .session-details-box { background: #fff !important; border: 2px inset #fff !important; color: #000 !important; }
-body.devops-mode .detail-date { color: #0000FF !important; }
-body.devops-mode .detail-desc { color: #000 !important; }
-</style>
-</head>
-<body>
+        .hype {
+            margin-top: 25px;
+            background: #004b23;
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: clamp(16px, 4vw, 20px);
+            box-shadow: 0 4px 15px rgba(0, 75, 35, 0.4);
+        }
 
-<!-- Кнопка Великоднє Яйце -->
-<div class="devops-easter-egg" id="devopsBtn" title="devops mode">devops</div>
+        .loader {
+            color: #5bc0be;
+            font-style: italic;
+            text-align: center;
+        }
 
-<button class="cal-toggle-btn" id="openSidebarBtn" title="Відкрити календар">📅</button>
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
+        /* СТІКЕРИ НА КАРТЦІ */
+        .sticker {
+            position: absolute;
+            font-size: clamp(30px, 5vw, 50px);
+            opacity: .9;
+            user-select: none;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+            z-index: -1;
+        }
 
-<div class="sidebar" id="calendarSidebar">
-    <div class="sidebar-header">
-        <h2 id="sidebarTitle">🗺️ Карта подій</h2>
-        <button class="close-btn" id="closeSidebarBtn">×</button>
-    </div>
-    
-    <div class="month-controls">
-        <button id="prevMonthBtn">◀</button>
-        <div class="month-title" id="monthTitle">Серпень 2026</div>
-        <button id="nextMonthBtn">▶</button>
-    </div>
+        .s1 {
+            top: 18px;
+            left: 18px;
+            transform: rotate(-15deg);
+        }
 
-    <div class="cal-grid" id="calGrid"></div>
+        .s2 {
+            top: 18px;
+            right: 25px;
+            transform: rotate(15deg);
+        }
 
-    <div class="session-details-box" id="sessionDetails">
-        <div class="no-selection" id="sidebarHelperText">👈 Натисни на підсвічену дату, щоб побачити деталі сесії</div>
-    </div>
-</div>
+        .s3 {
+            bottom: 25px;
+            left: 35px;
+            transform: rotate(-20deg);
+        }
 
-<div class="card">
+        .s4 {
+            bottom: 30px;
+            right: 35px;
+            transform: rotate(20deg);
+        }
 
+        /* БІЧНИЙ КАЛЕНДАР */
+        .cal-toggle-btn {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background: #5bc0be;
+            color: #0b132b;
+            border: none;
+            padding: 15px 20px 15px 25px;
+            border-radius: 30px 0 0 30px;
+            font-size: clamp(20px, 5vw, 28px);
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: -5px 0 15px rgba(91, 192, 190, 0.4);
+            transition: 0.3s ease;
+        }
 
-    <div><h1 id="title">🎲 ПІДГОТОВКА ДО ЕПІЧНОЇ ПРИГОДИ</h1></div>
-    
-    <div class="subtitle" id="target-date-display">Шукаємо сліди майстра... 🔍</div>
+        .cal-toggle-btn:hover {
+            background: #f4d35e;
+            box-shadow: -5px 0 20px rgba(244, 211, 94, 0.6);
+            padding-right: 35px;
+        }
 
-    <div class="counter">
-        <div id="days">...</div>
-        <div class="label" id="label-text">днів до наступної партії</div>
-    </div>
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(3px);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s;
+            z-index: 101;
+        }
 
-    <div class="calendar-box">
-        <h3 id="calHeader">📅 Найближчі плани</h3>
-        <div id="calendar-list" class="loader">Читаємо стародавні сувої (завантаження...)</div>
-    </div>
+        .sidebar-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
 
-    <div class="hype" id="hypeMsg">🔥 Пригода вже близько! Готуйте чарники!</div>
-</div>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: min(400px, 100%);
+            height: 100vh;
+            background: #151d33;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
+            z-index: 102;
+            transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-left: 2px solid #5bc0be;
+            overflow-y: auto;
+        }
 
-<script>
-const DATA_URL = "https://gist.githubusercontent.com/vladik2312/e1aeab68d4a4a9def64b6f6eef914ac0/raw/schedule.txt";
+        .sidebar.active {
+            right: 0;
+        }
 
-const titles = [
-    "🎲 ПІДГОТОВКА ДО ЕПІЧНОЇ ПРИГОДИ", "✨ ІНСТИТУТ НАТУРАЛЬНИХ 20",
-    "🐉 ДЕПАРТАМЕНТ ОЧІКУВАННЯ ДРАКОНІВ", "🧙‍♂️ МІНІСТЕРСТВО МАГІЧНИХ ЗБОРІВ",
-    "🚀 D&D HYPE TRACKER", "🏰 БРАМА ДО НЕЗВІДАНИХ СВІТІВ",
-    "🏕️ КОРОТКИЙ ВІДПОЧИНОК ПЕРЕД БОСОМ"
-];
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-let allSessions = [];
-let currentCalDate = new Date(); 
-let isDevopsMode = false;
+        .sidebar-header h2 {
+            color: #f4d35e;
+            font-size: clamp(20px, 5vw, 24px);
+        }
 
-document.getElementById("title").textContent = titles[Math.floor(Math.random() * titles.length)];
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a9b4c2;
+            font-size: 35px;
+            line-height: 1;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-async function loadSchedule() {
-    try {
-        const fetchUrl = DATA_URL + "?t=" + new Date().getTime();
-        const response = await fetch(fetchUrl);
-        if (!response.ok) throw new Error("Помилка підключення до сувоїв.");
-        
-        const text = await response.text();
-        const rows = text.split(/\r?\n/);
-        
-        for (let row of rows) {
-            let cleanRow = row.trim();
-            if (!cleanRow || !cleanRow.includes('|')) continue; 
+        .close-btn:hover {
+            color: #ff5555;
+            transform: scale(1.1);
+        }
 
-            let parts = cleanRow.split('|');
-            let dateStr = parts[0].trim();
-            let descStr = parts[1].trim();
+        .month-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
 
-            let dParts = dateStr.split('.');
-            if (dParts.length === 3) {
-                let dateObj = new Date(dParts[2], dParts[1] - 1, dParts[0]);
-                if (!isNaN(dateObj.getTime())) {
-                    allSessions.push({ dateStr, descStr, dateObj });
-                }
+        .month-controls button {
+            background: rgba(91, 192, 190, 0.1);
+            border: 1px solid #5bc0be;
+            color: #5bc0be;
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .month-controls button:hover {
+            background: #5bc0be;
+            color: #0b132b;
+        }
+
+        .month-title {
+            font-size: clamp(16px, 4vw, 20px);
+            font-weight: bold;
+            color: #edf2f4;
+            text-transform: capitalize;
+        }
+
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+
+        .cal-day-name {
+            color: #8d99ae;
+            font-size: clamp(12px, 3vw, 14px);
+            font-weight: bold;
+            padding-bottom: 5px;
+        }
+
+        .cal-cell {
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: clamp(14px, 4vw, 16px);
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .cal-cell.empty {
+            background: transparent;
+        }
+
+        .cal-cell.today {
+            border: 2px solid #8d99ae;
+            color: #fff;
+        }
+
+        .cal-cell.session {
+            background: rgba(244, 211, 94, 0.15);
+            color: #f4d35e;
+            font-weight: bold;
+            border: 1px solid #f4d35e;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(244, 211, 94, 0.2);
+        }
+
+        .cal-cell.session:hover {
+            background: #f4d35e;
+            color: #0b132b;
+            transform: scale(1.1);
+            z-index: 2;
+            box-shadow: 0 0 15px rgba(244, 211, 94, 0.5);
+        }
+
+        .session-details-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border-left: 4px solid #5bc0be;
+            min-height: 80px;
+        }
+
+        .detail-date {
+            font-weight: bold;
+            color: #5bc0be;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .detail-desc {
+            color: #a9b4c2;
+            font-style: italic;
+            line-height: 1.4;
+            overflow-wrap: break-word;
+        }
+
+        .no-selection {
+            color: #6c757d;
+            font-style: italic;
+            display: flex;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* ОПТИМІЗАЦІЯ ПІД МОБІЛЬНІ ПРИСТРОЇ */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .card {
+                padding: 25px 15px;
+                border-width: 5px;
+            }
+
+            .session-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .session-desc {
+                text-align: left;
+                width: 100%;
+            }
+
+            .sidebar {
+                padding: 20px 15px;
+                border-left: none;
+            }
+
+            .cal-toggle-btn {
+                padding: 12px 15px 12px 20px;
+            }
+
+            /* ХОВАЄМО КНОПКУ ПАСХАЛКИ НА МОБІЛКАХ */
+            .devops-easter-egg {
+                display: none !important;
             }
         }
 
-        if (allSessions.length === 0) throw new Error("Розклад порожній.");
-        allSessions.sort((a, b) => a.dateObj - b.dateObj);
-
-        const today = new Date();
-        today.setHours(0,0,0,0);
-        
-        const futureSessions = allSessions.filter(s => s.dateObj >= today);
-        renderMainCard(futureSessions, today);
-        buildVisualCalendar();
-
-    } catch (error) {
-        console.error(error);
-        document.getElementById("calendar-list").innerHTML = `<div style="color:#ff5555; text-align:center;">❌ ${error.message}</div>`;
-        document.getElementById("days").textContent = "!?";
-    }
-}
-
-function renderMainCard(sessions, today) {
-    const calendarList = document.getElementById("calendar-list");
-    calendarList.innerHTML = ""; 
-
-    if (sessions.length === 0) {
-        document.getElementById("target-date-display").innerHTML = "<b>Дати невідомі... DM пішов у туман.</b>";
-        document.getElementById("days").textContent = "NaN";
-        calendarList.innerHTML = "<div class='session-item'>Запланованих ігор поки немає 😭</div>";
-        return;
-    }
-
-    const nextGame = sessions[0];
-    document.getElementById("target-date-display").innerHTML = isDevopsMode 
-        ? `[ UNDER CONSTRUCTION ] <br> NEXT GAME: ${nextGame.dateStr}` 
-        : `Наступна партія: <b>${nextGame.dateStr}</b> <br> <small style="color:#a9b4c2">(${nextGame.descStr})</small>`;
-    
-    const diff = nextGame.dateObj - today;
-    const days = Math.floor(diff / (1000*60*60*24));
-    
-    const daysElement = document.getElementById("days");
-    const labelElement = document.getElementById("label-text");
-
-    if (days > 0) {
-        daysElement.textContent = days;
-    } else if (days === 0) {
-        daysElement.textContent = isDevopsMode ? "NOW" : "СЬОГОДНІ!";
-        daysElement.style.fontSize = "clamp(40px, 8vw, 70px)";
-        labelElement.textContent = isDevopsMode ? "EXECUTE()" : "ЧАС КИДАТИ ІНІЦІАТИВУ!";
-    }
-
-    sessions.slice(0, 3).forEach((session, index) => {
-        const item = document.createElement("div");
-        item.className = "session-item" + (index === 0 ? " next-game" : "");
-        item.innerHTML = `
-            <div class="session-date">${isDevopsMode ? '' : (index === 0 ? '🔥 ' : '📅 ')}${session.dateStr}</div>
-            <div class="session-desc">${session.descStr}</div>
-        `;
-        calendarList.appendChild(item);
-    });
-}
-
-const monthNames = ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"];
-
-function buildVisualCalendar() {
-    const grid = document.getElementById("calGrid");
-    grid.innerHTML = ""; 
-
-    const year = currentCalDate.getFullYear();
-    const month = currentCalDate.getMonth();
-
-    document.getElementById("monthTitle").textContent = `${monthNames[month]} ${year}`;
-
-    const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
-    daysOfWeek.forEach(d => {
-        const el = document.createElement("div");
-        el.className = "cal-day-name";
-        el.textContent = d;
-        grid.appendChild(el);
-    });
-
-    const firstDayIndex = new Date(year, month, 1).getDay(); 
-    const startDay = firstDayIndex === 0 ? 6 : firstDayIndex - 1; 
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const today = new Date();
-
-    for (let i = 0; i < startDay; i++) {
-        const emptyCell = document.createElement("div");
-        emptyCell.className = "cal-cell empty";
-        grid.appendChild(emptyCell);
-    }
-
-    for (let i = 1; i <= daysInMonth; i++) {
-        const cell = document.createElement("div");
-        cell.className = "cal-cell";
-        cell.textContent = i;
-
-        if (year === today.getFullYear() && month === today.getMonth() && i === today.getDate()) {
-            cell.classList.add("today");
+        /* ========================================= */
+        /* ⚠️ РЕЖИМ СТАРОГО ВЕБ-САЙТУ 2000-Х (ПАСХАЛКА) */
+        /* ========================================= */
+        .devops-easter-egg {
+            position: fixed;
+            bottom: 5px;
+            right: 8px;
+            color: rgba(255, 255, 255, 0.3);
+            /* Майже прозора */
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 9999;
+            user-select: none;
+            transition: 0.3s;
         }
 
-        const sessionForThisDay = allSessions.find(s => 
-            s.dateObj.getFullYear() === year && 
-            s.dateObj.getMonth() === month && 
-            s.dateObj.getDate() === i
-        );
-
-        if (sessionForThisDay) {
-            cell.classList.add("session");
-            cell.title = sessionForThisDay.descStr; 
-            
-            cell.onclick = () => {
-                document.getElementById("sessionDetails").innerHTML = `
-                    <div class="detail-date">${isDevopsMode ? '' : '🎲'} ${sessionForThisDay.dateStr}</div>
-                    <div class="detail-desc">${sessionForThisDay.descStr}</div>
-                `;
-            };
+        .devops-easter-egg:hover {
+            color: rgba(255, 255, 255, 0.4);
         }
 
-        grid.appendChild(cell);
-    }
-}
-
-document.getElementById("prevMonthBtn").addEventListener("click", () => {
-    currentCalDate.setMonth(currentCalDate.getMonth() - 1);
-    buildVisualCalendar();
-});
-document.getElementById("nextMonthBtn").addEventListener("click", () => {
-    currentCalDate.setMonth(currentCalDate.getMonth() + 1);
-    buildVisualCalendar();
-});
-
-const sidebar = document.getElementById("calendarSidebar");
-const overlay = document.getElementById("sidebarOverlay");
-const openBtn = document.getElementById("openSidebarBtn");
-const closeBtn = document.getElementById("closeSidebarBtn");
-
-function openSidebar() {
-    sidebar.classList.add("active");
-    overlay.classList.add("active");
-    document.getElementById("sessionDetails").innerHTML = `<div class="no-selection" id="sidebarHelperText">${isDevopsMode ? 'Click link to view event.' : '👈 Натисни на золоту дату, щоб побачити деталі сесії'}</div>`;
-    
-    const today = new Date();
-    const nextGame = allSessions.find(s => s.dateObj >= today);
-    if (nextGame) {
-        currentCalDate = new Date(nextGame.dateObj);
-        buildVisualCalendar();
-    }
-}
-
-function closeSidebar() {
-    sidebar.classList.remove("active");
-    overlay.classList.remove("active");
-}
-
-openBtn.addEventListener("click", openSidebar);
-closeBtn.addEventListener("click", closeSidebar);
-overlay.addEventListener("click", closeSidebar); 
-
-// ==========================================
-// ЛОГІКА ДЛЯ ПАСХАЛКИ (UGLY 2000s MODE)
-// ==========================================
-document.getElementById("devopsBtn").addEventListener("click", () => {
-    isDevopsMode = !isDevopsMode;
-    document.body.classList.toggle("devops-mode");
-    
-    if (isDevopsMode) {
-        // Дизайн старого інтернету + жарт
-        document.getElementById("title").innerHTML = "<marquee>Welcome to Voland's Webzone!!!</marquee>";
-        document.getElementById("hypeMsg").innerHTML = "<marquee scrollamount='20'>ERROR: D&D session blocked.</marquee>";
-        document.getElementById("openSidebarBtn").textContent = "Open Calendar";
-        document.getElementById("sidebarTitle").textContent = "Calendar Applet v1.0";
-        document.getElementById("calHeader").textContent = "Upcoming Events List";
-        if (document.getElementById("sidebarHelperText")) {
-            document.getElementById("sidebarHelperText").textContent = "Click link to view event.";
+        body.devops-mode {
+            background: #c0c0c0 !important;
+            /* Старий віндовий сірий фон */
         }
-    } else {
-        // Повертаємо магію
-        document.getElementById("title").innerHTML = titles[Math.floor(Math.random() * titles.length)];
-        document.getElementById("hypeMsg").innerHTML = "🔥 Пригода вже близько! Готуйте чарники!";
-        document.getElementById("openSidebarBtn").textContent = "📅";
-        document.getElementById("sidebarTitle").textContent = "🗺️ Карта подій";
-        document.getElementById("calHeader").textContent = "📅 Найближчі плани";
-        if (document.getElementById("sidebarHelperText")) {
-            document.getElementById("sidebarHelperText").textContent = "👈 Натисни на золоту дату, щоб побачити деталі сесії";
-        }
-    }
-    
-    // Перемальовуємо дані, щоб зникли/з'явилися емодзі
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const futureSessions = allSessions.filter(s => s.dateObj >= today);
-    renderMainCard(futureSessions, today);
-});
 
-loadSchedule();
-</script>
+        body.devops-mode::before {
+            display: none;
+        }
+
+        body.devops-mode * {
+            font-family: "Times New Roman", Times, serif !important;
+            text-shadow: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        body.devops-mode .card {
+            background: #ffffff !important;
+            border: 4px inset #ffffff !important;
+            /* Страшна рамка */
+        }
+
+        body.devops-mode h1 {
+            color: #0000FF !important;
+            /* Вирвиоко синій */
+            text-decoration: underline !important;
+        }
+
+        body.devops-mode .subtitle {
+            color: #000 !important;
+            font-weight: bold !important;
+        }
+
+        body.devops-mode .counter {
+            background: #ffffff !important;
+            border: 2px solid #000000 !important;
+        }
+
+        body.devops-mode #days {
+            color: #FF0000 !important;
+            font-size: 80px !important;
+        }
+
+        /* Страшний червоний */
+        body.devops-mode .label {
+            color: #000000 !important;
+        }
+
+        body.devops-mode .calendar-box {
+            background: #ffffff !important;
+            border: 2px dashed #0000FF !important;
+        }
+
+        body.devops-mode h3 {
+            color: #000000 !important;
+            text-decoration: underline;
+        }
+
+        body.devops-mode .session-item {
+            border-bottom: 1px solid #000 !important;
+        }
+
+        body.devops-mode .session-date {
+            color: #0000FF !important;
+        }
+
+        body.devops-mode .session-desc {
+            color: #000 !important;
+            font-style: normal !important;
+        }
+
+        body.devops-mode .session-item.next-game {
+            background: #FFFF00 !important;
+            border: 1px solid #000 !important;
+        }
+
+        /* Жовтий маркер */
+        body.devops-mode .sticker {
+            display: none !important;
+        }
+
+        body.devops-mode .hype {
+            background: #FFFF00 !important;
+            border: 2px solid #FF0000 !important;
+            color: #FF0000 !important;
+            text-align: center !important;
+        }
+
+        body.devops-mode .cal-toggle-btn {
+            background: #c0c0c0 !important;
+            border: 3px outset #ffffff !important;
+            color: #000 !important;
+            padding: 10px !important;
+            font-size: 16px !important;
+            right: 5px !important;
+        }
+
+        body.devops-mode .sidebar {
+            background: #c0c0c0 !important;
+            border-left: 4px inset #ffffff !important;
+        }
+
+        body.devops-mode .sidebar-header h2 {
+            color: #0000FF !important;
+        }
+
+        body.devops-mode .close-btn {
+            color: #000 !important;
+            background: #c0c0c0 !important;
+            border: 2px outset #ffffff !important;
+            font-size: 18px !important;
+            padding: 2px 8px !important;
+        }
+
+        body.devops-mode .cal-day-name {
+            color: #000 !important;
+        }
+
+        body.devops-mode .cal-cell {
+            border: 1px solid #808080 !important;
+            color: #000 !important;
+            background: #fff !important;
+        }
+
+        body.devops-mode .cal-cell.today {
+            border: 2px solid #FF0000 !important;
+        }
+
+        body.devops-mode .cal-cell.session {
+            background: #FFFF00 !important;
+            color: #0000FF !important;
+            text-decoration: underline;
+        }
+
+        body.devops-mode .session-details-box {
+            background: #fff !important;
+            border: 2px inset #fff !important;
+            color: #000 !important;
+        }
+
+        body.devops-mode .detail-date {
+            color: #0000FF !important;
+        }
+
+        body.devops-mode .detail-desc {
+            color: #000 !important;
+        }
+
+        /* Subtle link to the source schedule below upcoming sessions */
+        .sheet-link-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .sheet-link {
+            color: #a9b4c2;
+            font-size: 12px;
+            text-decoration: none;
+            opacity: .75;
+            transition: color .2s ease, opacity .2s ease;
+        }
+
+        .sheet-link:hover,
+        .sheet-link:focus-visible {
+            color: #5bc0be;
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        body.devops-mode .sheet-link {
+            color: #0000FF !important;
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Кнопка Великоднє Яйце -->
+    <div class="devops-easter-egg" id="devopsBtn" title="devops mode">devops</div>
+
+    <button class="cal-toggle-btn" id="openSidebarBtn" title="Відкрити календар">📅</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="sidebar" id="calendarSidebar">
+        <div class="sidebar-header">
+            <h2 id="sidebarTitle">🗺️ Карта подій</h2>
+            <button class="close-btn" id="closeSidebarBtn">×</button>
+        </div>
+
+        <div class="month-controls">
+            <button id="prevMonthBtn">◀</button>
+            <div class="month-title" id="monthTitle">Серпень 2026</div>
+            <button id="nextMonthBtn">▶</button>
+        </div>
+
+        <div class="cal-grid" id="calGrid"></div>
+
+        <div class="session-details-box" id="sessionDetails">
+            <div class="no-selection" id="sidebarHelperText">👈 Натисни на підсвічену дату, щоб побачити деталі сесії
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+
+
+        <div>
+            <h1 id="title">🎲 ПІДГОТОВКА ДО ЕПІЧНОЇ ПРИГОДИ</h1>
+        </div>
+
+        <div class="subtitle" id="target-date-display">Шукаємо сліди майстра... 🔍</div>
+
+        <div class="counter">
+            <div id="days">...</div>
+            <div class="label" id="label-text">днів до наступної партії</div>
+        </div>
+
+        <div class="calendar-box">
+            <h3 id="calHeader">📅 Найближчі плани</h3>
+            <div id="calendar-list" class="loader">Читаємо стародавні сувої (завантаження...)</div>
+            <div class="sheet-link-row">
+                <!-- Edit the source Google Sheet in a new tab. -->
+                <a class="sheet-link"
+                    href="https://docs.google.com/spreadsheets/d/1c1G0q0pUrK0LTN0wQmzVROLNfs8V8rUWetaNXWmKXx4/edit?usp=sharing"
+                    target="_blank" rel="noopener noreferrer" title="Відкрити Google Sheets для додавання дати">＋ Додати
+                    дату</a>
+            </div>
+        </div>
+
+        <div class="hype" id="hypeMsg">🔥 Пригода вже близько! Готуйте чарники!</div>
+    </div>
+
+    <script>
+        const DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTKAOb00UN2eVVJHRNTovNfFyV9i8a0PfDqSGQgj8gNzupOQELe0BiebC0j2hpeHojneXVp3P4a-hwD/pub?gid=0&single=true&output=csv";
+        function withCacheBust(url) {
+            const parsed = new URL(url, location.href);
+            parsed.searchParams.set('t', Date.now());
+            return parsed.toString();
+        }
+
+        const titles = [
+            "🎲 ПІДГОТОВКА ДО ЕПІЧНОЇ ПРИГОДИ", "✨ ІНСТИТУТ НАТУРАЛЬНИХ 20",
+            "🐉 ДЕПАРТАМЕНТ ОЧІКУВАННЯ ДРАКОНІВ", "🧙‍♂️ МІНІСТЕРСТВО МАГІЧНИХ ЗБОРІВ",
+            "🚀 D&D HYPE TRACKER", "🏰 БРАМА ДО НЕЗВІДАНИХ СВІТІВ",
+            "🏕️ КОРОТКИЙ ВІДПОЧИНОК ПЕРЕД БОСОМ"
+        ];
+
+        let allSessions = [];
+        let currentCalDate = new Date();
+        let isDevopsMode = false;
+
+        document.getElementById("title").textContent = titles[Math.floor(Math.random() * titles.length)];
+
+        // Parse quoted CSV fields, embedded commas, and multiline descriptions.
+        function parseCSV(csv) {
+            const rows = [];
+            let row = [], field = '', quoted = false;
+            for (let i = 0; i < csv.length; i++) {
+                const ch = csv[i];
+                if (ch === '"') {
+                    if (quoted && csv[i + 1] === '"') { field += '"'; i++; }
+                    else quoted = !quoted;
+                } else if (ch === ',' && !quoted) {
+                    row.push(field); field = '';
+                } else if ((ch === '\n' || ch === '\r') && !quoted) {
+                    if (ch === '\r' && csv[i + 1] === '\n') i++;
+                    row.push(field); field = '';
+                    if (row.some(value => value.trim())) rows.push(row);
+                    row = [];
+                } else {
+                    field += ch;
+                }
+            }
+            row.push(field);
+            if (row.some(value => value.trim())) rows.push(row);
+            return rows;
+        }
+
+        function parseSessionDate(value) {
+            const match = value.trim().match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/);
+            if (!match) return null;
+            const day = Number(match[1]), month = Number(match[2]), year = Number(match[3]);
+            const date = new Date(year, month - 1, day);
+            if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
+            return date;
+        }
+
+        function parseSessionRow(row) {
+            // The published sheet has a single column: 'DD.MM.YYYY | description'.
+            // Also support a future two-column sheet (date, description).
+            const first = (row[0] || '').trim();
+            let dateStr, descStr;
+            const match = first.match(/^(\d{1,2}[.\/-]\d{1,2}[.\/-]\d{4})\s*\|\s*([\s\S]*)$/);
+            if (match) {
+                dateStr = match[1];
+                descStr = [match[2], ...row.slice(1)].join(',').trim();
+            } else {
+                dateStr = first;
+                descStr = row.slice(1).join(',').trim();
+            }
+            const dateObj = parseSessionDate(dateStr);
+            return dateObj ? { dateStr, descStr, dateObj } : null;
+        }
+
+        async function loadSchedule() {
+            try {
+                const response = await fetch(withCacheBust(DATA_URL));
+                if (!response.ok) throw new Error('Не вдалося завантажити Google Sheets (HTTP ' + response.status + ').');
+                const csv = await response.text();
+                const rows = parseCSV(csv.replace(/^\uFEFF/, ''));
+                const sessions = [];
+                for (const row of rows) {
+                    const session = parseSessionRow(row);
+                    if (session) sessions.push(session);
+                }
+                if (!sessions.length) throw new Error('У таблиці немає жодної коректної дати.');
+                allSessions = sessions.sort((a, b) => a.dateObj - b.dateObj);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                renderMainCard(allSessions.filter(s => s.dateObj >= today), today);
+                buildVisualCalendar();
+            } catch (error) {
+                document.getElementById('calendar-list').textContent = '❌ ' + error.message;
+                document.getElementById('days').textContent = '!?';
+            }
+        }
+
+        function renderMainCard(sessions, today) {
+            const calendarList = document.getElementById("calendar-list");
+            calendarList.innerHTML = "";
+
+            if (sessions.length === 0) {
+                document.getElementById("target-date-display").innerHTML = "<b>Дати невідомі... DM пішов у туман.</b>";
+                document.getElementById("days").textContent = "NaN";
+                calendarList.innerHTML = "<div class='session-item'>Запланованих ігор поки немає 😭</div>";
+                return;
+            }
+
+            const nextGame = sessions[0];
+            const targetDisplay = document.getElementById("target-date-display");
+            targetDisplay.replaceChildren();
+            const dateLine = document.createElement('div');
+            dateLine.textContent = isDevopsMode ? '[ UNDER CONSTRUCTION ] NEXT GAME: ' + nextGame.dateStr : 'Наступна партія: ' + nextGame.dateStr;
+            targetDisplay.appendChild(dateLine);
+            if (!isDevopsMode) {
+                const description = document.createElement('small');
+                description.style.color = '#a9b4c2';
+                description.textContent = '(' + nextGame.descStr + ')';
+                targetDisplay.appendChild(description);
+            }
+
+            const diff = nextGame.dateObj - today;
+            const days = Math.round(diff / (1000 * 60 * 60 * 24));
+
+            const daysElement = document.getElementById("days");
+            const labelElement = document.getElementById("label-text");
+
+            daysElement.style.fontSize = "";
+            labelElement.textContent = isDevopsMode ? "DAYS TO NEXT GAME" : "днів до наступної партії";
+            if (days > 0) {
+                daysElement.textContent = days;
+            } else if (days === 0) {
+                daysElement.textContent = isDevopsMode ? "NOW" : "СЬОГОДНІ!";
+                daysElement.style.fontSize = "clamp(40px, 8vw, 70px)";
+                labelElement.textContent = isDevopsMode ? "EXECUTE()" : "ЧАС КИДАТИ ІНІЦІАТИВУ!";
+            }
+
+            sessions.slice(0, 3).forEach((session, index) => {
+                const item = document.createElement("div");
+                item.className = "session-item" + (index === 0 ? " next-game" : "");
+                const dateEl = document.createElement('div');
+                dateEl.className = 'session-date';
+                dateEl.textContent = (isDevopsMode ? '' : (index === 0 ? '🔥 ' : '📅 ')) + session.dateStr;
+                const descEl = document.createElement('div');
+                descEl.className = 'session-desc';
+                descEl.textContent = session.descStr;
+                item.append(dateEl, descEl);
+                calendarList.appendChild(item);
+            });
+        }
+
+        const monthNames = ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"];
+
+        function buildVisualCalendar() {
+            const grid = document.getElementById("calGrid");
+            grid.innerHTML = "";
+
+            const year = currentCalDate.getFullYear();
+            const month = currentCalDate.getMonth();
+
+            document.getElementById("monthTitle").textContent = `${monthNames[month]} ${year}`;
+
+            const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
+            daysOfWeek.forEach(d => {
+                const el = document.createElement("div");
+                el.className = "cal-day-name";
+                el.textContent = d;
+                grid.appendChild(el);
+            });
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const startDay = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+
+            for (let i = 0; i < startDay; i++) {
+                const emptyCell = document.createElement("div");
+                emptyCell.className = "cal-cell empty";
+                grid.appendChild(emptyCell);
+            }
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const cell = document.createElement("div");
+                cell.className = "cal-cell";
+                cell.textContent = i;
+
+                if (year === today.getFullYear() && month === today.getMonth() && i === today.getDate()) {
+                    cell.classList.add("today");
+                }
+
+                const sessionForThisDay = allSessions.find(s =>
+                    s.dateObj.getFullYear() === year &&
+                    s.dateObj.getMonth() === month &&
+                    s.dateObj.getDate() === i
+                );
+
+                if (sessionForThisDay) {
+                    cell.classList.add("session");
+                    cell.title = sessionForThisDay.descStr;
+
+                    cell.onclick = () => {
+                        const details = document.getElementById('sessionDetails');
+                        const dateEl = document.createElement('div');
+                        dateEl.className = 'detail-date';
+                        dateEl.textContent = (isDevopsMode ? '' : '🎲 ') + sessionForThisDay.dateStr;
+                        const descEl = document.createElement('div');
+                        descEl.className = 'detail-desc';
+                        descEl.textContent = sessionForThisDay.descStr;
+                        details.replaceChildren(dateEl, descEl);
+                    };
+                }
+
+                grid.appendChild(cell);
+            }
+        }
+
+        document.getElementById("prevMonthBtn").addEventListener("click", () => {
+            currentCalDate.setMonth(currentCalDate.getMonth() - 1);
+            buildVisualCalendar();
+        });
+        document.getElementById("nextMonthBtn").addEventListener("click", () => {
+            currentCalDate.setMonth(currentCalDate.getMonth() + 1);
+            buildVisualCalendar();
+        });
+
+        const sidebar = document.getElementById("calendarSidebar");
+        const overlay = document.getElementById("sidebarOverlay");
+        const openBtn = document.getElementById("openSidebarBtn");
+        const closeBtn = document.getElementById("closeSidebarBtn");
+
+        function openSidebar() {
+            sidebar.classList.add("active");
+            overlay.classList.add("active");
+            document.getElementById("sessionDetails").innerHTML = `<div class="no-selection" id="sidebarHelperText">${isDevopsMode ? 'Click link to view event.' : '👈 Натисни на золоту дату, щоб побачити деталі сесії'}</div>`;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const nextGame = allSessions.find(s => s.dateObj >= today);
+            if (nextGame) {
+                currentCalDate = new Date(nextGame.dateObj);
+                buildVisualCalendar();
+            }
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove("active");
+            overlay.classList.remove("active");
+        }
+
+        openBtn.addEventListener("click", openSidebar);
+        closeBtn.addEventListener("click", closeSidebar);
+        overlay.addEventListener("click", closeSidebar);
+
+        // ==========================================
+        // ЛОГІКА ДЛЯ ПАСХАЛКИ (UGLY 2000s MODE)
+        // ==========================================
+        document.getElementById("devopsBtn").addEventListener("click", () => {
+            isDevopsMode = !isDevopsMode;
+            document.body.classList.toggle("devops-mode");
+
+            if (isDevopsMode) {
+                // Дизайн старого інтернету + жарт
+                document.getElementById("title").innerHTML = "<marquee>Welcome to Voland's Webzone!!!</marquee>";
+                document.getElementById("hypeMsg").innerHTML = "<marquee scrollamount='20'>ERROR: D&D session blocked.</marquee>";
+                document.getElementById("openSidebarBtn").textContent = "Open Calendar";
+                document.getElementById("sidebarTitle").textContent = "Calendar Applet v1.0";
+                document.getElementById("calHeader").textContent = "Upcoming Events List";
+                if (document.getElementById("sidebarHelperText")) {
+                    document.getElementById("sidebarHelperText").textContent = "Click link to view event.";
+                }
+            } else {
+                // Повертаємо магію
+                document.getElementById("title").innerHTML = titles[Math.floor(Math.random() * titles.length)];
+                document.getElementById("hypeMsg").innerHTML = "🔥 Пригода вже близько! Готуйте чарники!";
+                document.getElementById("openSidebarBtn").textContent = "📅";
+                document.getElementById("sidebarTitle").textContent = "🗺️ Карта подій";
+                document.getElementById("calHeader").textContent = "📅 Найближчі плани";
+                if (document.getElementById("sidebarHelperText")) {
+                    document.getElementById("sidebarHelperText").textContent = "👈 Натисни на золоту дату, щоб побачити деталі сесії";
+                }
+            }
+
+            // Перемальовуємо дані, щоб зникли/з'явилися емодзі
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const futureSessions = allSessions.filter(s => s.dateObj >= today);
+            renderMainCard(futureSessions, today);
+        });
+
+        loadSchedule();
+    </script>
 
 </body>
+
 </html>
