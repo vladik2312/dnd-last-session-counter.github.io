@@ -331,8 +331,57 @@
             transition: 0.2s;
         }
 
+        .cal-cell:not(.empty) {
+            cursor: pointer;
+        }
+
+        .cal-cell:not(.empty):not(.session):hover {
+            background: rgba(91, 192, 190, 0.15);
+        }
+
+        .cal-cell.selected {
+            outline: 2px solid #5bc0be;
+            outline-offset: 1px;
+        }
+
         .cal-cell.empty {
             background: transparent;
+        }
+
+        .add-event-btn {
+            margin-top: 12px;
+            width: 100%;
+            background: rgba(91, 192, 190, 0.1);
+            border: 1px solid #5bc0be;
+            color: #5bc0be;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .add-event-btn:hover {
+            background: #5bc0be;
+            color: #0b132b;
+        }
+
+        .add-event-hint {
+            margin-top: 8px;
+            color: #a9b4c2;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        body.devops-mode .add-event-btn {
+            background: #c0c0c0 !important;
+            border: 3px outset #ffffff !important;
+            color: #000 !important;
+        }
+
+        body.devops-mode .add-event-hint {
+            color: #000 !important;
         }
 
         .cal-cell.today {
@@ -617,12 +666,40 @@
             text-decoration: underline;
         }
 
+        /* Дати, коли хтось не може (опис починається з "-") */
+        .detail-date.blocked,
+        .detail-desc.blocked {
+            color: #ff5c5c;
+        }
+
+        .cal-cell.session.blocked {
+            background: rgba(255, 92, 92, 0.15);
+            color: #ff5c5c;
+            border: 1px solid #ff5c5c;
+            box-shadow: 0 0 10px rgba(255, 92, 92, 0.2);
+        }
+
+        .cal-cell.session.blocked:hover {
+            background: #ff5c5c;
+            color: #0b132b;
+            box-shadow: 0 0 15px rgba(255, 92, 92, 0.5);
+        }
+
+        body.devops-mode .detail-date.blocked,
+        body.devops-mode .detail-desc.blocked {
+            color: #FF0000 !important;
+        }
+
+        body.devops-mode .cal-cell.session.blocked {
+            background: #FF0000 !important;
+            color: #fff !important;
+        }
+
         body.devops-mode .sheet-link {
             color: #0000FF !important;
             opacity: 1;
             text-decoration: underline;
         }
-
     </style>
 </head>
 
@@ -649,7 +726,7 @@
         <div class="cal-grid" id="calGrid"></div>
 
         <div class="session-details-box" id="sessionDetails">
-            <div class="no-selection" id="sidebarHelperText">👈 Натисни на підсвічену дату, щоб побачити деталі сесії
+            <div class="no-selection" id="sidebarHelperText">👈 Натисни на дату: золота — гра, червона — хтось не може, будь-яка — додати подію
             </div>
         </div>
     </div>
@@ -684,7 +761,8 @@
     </div>
 
     <script>
-        const DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTKAOb00UN2eVVJHRNTovNfFyV9i8a0PfDqSGQgj8gNzupOQELe0BiebC0j2hpeHojneXVp3P4a-hwD/pub?gid=0&single=true&output=csv";
+        const SHEET_EDIT_URL = "https://docs.google.com/spreadsheets/d/1c1G0q0pUrK0LTN0wQmzVROLNfs8V8rUWetaNXWmKXx4/edit?usp=sharing";
+        const DATA_URL ="https://docs.google.com/spreadsheets/d/e/2PACX-1vTKAOb00UN2eVVJHRNTovNfFyV9i8a0PfDqSGQgj8gNzupOQELe0BiebC0j2hpeHojneXVp3P4a-hwD/pub?gid=0&single=true&output=csv";
         function withCacheBust(url) {
             const parsed = new URL(url, location.href);
             parsed.searchParams.set('t', Date.now());
@@ -752,7 +830,15 @@
                 descStr = row.slice(1).join(',').trim();
             }
             const dateObj = parseSessionDate(dateStr);
-            return dateObj ? { dateStr, descStr, dateObj } : null;
+            if (!dateObj) return null;
+            // A description starting with "-" means someone can't make it that day.
+            const blocked = /^[-–—]/.test(descStr);
+            if (blocked) descStr = descStr.replace(/^[-–—]\s*/, '') || 'Хтось не може в цей день';
+            return { dateStr, descStr, dateObj, blocked };
+        }
+
+        function describeSession(session) {
+            return session.blocked ? '⛔ ' + session.descStr : session.descStr;
         }
 
         async function loadSchedule() {
@@ -782,14 +868,30 @@
             const calendarList = document.getElementById("calendar-list");
             calendarList.innerHTML = "";
 
-            if (sessions.length === 0) {
+            // Blocked dates ("-" in the description) are shown only in the sidebar calendar.
+            const available = sessions.filter(s => !s.blocked);
+
+            if (available.length === 0) {
                 document.getElementById("target-date-display").innerHTML = "<b>Дати невідомі... DM пішов у туман.</b>";
                 document.getElementById("days").textContent = "NaN";
                 calendarList.innerHTML = "<div class='session-item'>Запланованих ігор поки немає 😭</div>";
                 return;
             }
 
-            const nextGame = sessions[0];
+            const nextGame = available[0];
+            available.slice(0, 3).forEach((session, index) => {
+                const item = document.createElement("div");
+                item.className = "session-item" + (index === 0 ? " next-game" : "");
+                const dateEl = document.createElement('div');
+                dateEl.className = 'session-date';
+                dateEl.textContent = (isDevopsMode ? '' : (index === 0 ? '🔥 ' : '📅 ')) + session.dateStr;
+                const descEl = document.createElement('div');
+                descEl.className = 'session-desc';
+                descEl.textContent = session.descStr;
+                item.append(dateEl, descEl);
+                calendarList.appendChild(item);
+            });
+
             const targetDisplay = document.getElementById("target-date-display");
             targetDisplay.replaceChildren();
             const dateLine = document.createElement('div');
@@ -817,19 +919,6 @@
                 daysElement.style.fontSize = "clamp(40px, 8vw, 70px)";
                 labelElement.textContent = isDevopsMode ? "EXECUTE()" : "ЧАС КИДАТИ ІНІЦІАТИВУ!";
             }
-
-            sessions.slice(0, 3).forEach((session, index) => {
-                const item = document.createElement("div");
-                item.className = "session-item" + (index === 0 ? " next-game" : "");
-                const dateEl = document.createElement('div');
-                dateEl.className = 'session-date';
-                dateEl.textContent = (isDevopsMode ? '' : (index === 0 ? '🔥 ' : '📅 ')) + session.dateStr;
-                const descEl = document.createElement('div');
-                descEl.className = 'session-desc';
-                descEl.textContent = session.descStr;
-                item.append(dateEl, descEl);
-                calendarList.appendChild(item);
-            });
         }
 
         const monthNames = ["Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"];
@@ -879,22 +968,69 @@
 
                 if (sessionForThisDay) {
                     cell.classList.add("session");
-                    cell.title = sessionForThisDay.descStr;
-
-                    cell.onclick = () => {
-                        const details = document.getElementById('sessionDetails');
-                        const dateEl = document.createElement('div');
-                        dateEl.className = 'detail-date';
-                        dateEl.textContent = (isDevopsMode ? '' : '🎲 ') + sessionForThisDay.dateStr;
-                        const descEl = document.createElement('div');
-                        descEl.className = 'detail-desc';
-                        descEl.textContent = sessionForThisDay.descStr;
-                        details.replaceChildren(dateEl, descEl);
-                    };
+                    if (sessionForThisDay.blocked) cell.classList.add("blocked");
+                    cell.title = describeSession(sessionForThisDay);
                 }
+
+                const cellDateStr = String(i).padStart(2, '0') + '.' + String(month + 1).padStart(2, '0') + '.' + year;
+                cell.onclick = () => {
+                    grid.querySelectorAll('.cal-cell.selected').forEach(c => c.classList.remove('selected'));
+                    cell.classList.add('selected');
+                    showDayDetails(cellDateStr, sessionForThisDay);
+                };
 
                 grid.appendChild(cell);
             }
+        }
+
+        function showDayDetails(dateStr, session) {
+            const details = document.getElementById('sessionDetails');
+            const dateEl = document.createElement('div');
+            const descEl = document.createElement('div');
+            const blocked = session && session.blocked;
+            dateEl.className = 'detail-date' + (blocked ? ' blocked' : '');
+            descEl.className = 'detail-desc' + (blocked ? ' blocked' : '');
+            if (session) {
+                dateEl.textContent = (isDevopsMode ? '' : (blocked ? '❌ ' : '🎲 ')) + dateStr;
+                descEl.textContent = describeSession(session);
+            } else {
+                dateEl.textContent = (isDevopsMode ? '' : '📆 ') + dateStr;
+                descEl.textContent = isDevopsMode ? 'No events.' : 'На цю дату ще нічого немає.';
+            }
+
+            const addBtn = document.createElement('button');
+            addBtn.className = 'add-event-btn';
+            addBtn.textContent = isDevopsMode ? 'Copy date & open sheet' : '📋 Скопіювати дату й додати подію';
+            const hint = document.createElement('div');
+            hint.className = 'add-event-hint';
+            addBtn.onclick = () => {
+                const copied = copyText(dateStr + ' | ');
+                window.open(SHEET_EDIT_URL, '_blank', 'noopener');
+                hint.textContent = copied
+                    ? `✅ Скопійовано «${dateStr} | ». Встав у нову клітинку таблиці (Ctrl+V) і допиши подію. Щоб позначити, що не можеш, почни текст з «-».`
+                    : `Не вдалося скопіювати. Напиши в таблиці вручну: ${dateStr} | текст події`;
+            };
+
+            details.replaceChildren(dateEl, descEl, addBtn, hint);
+        }
+
+        // Synchronous copy first, so the clipboard is filled before the sheet tab steals focus.
+        function copyText(text) {
+            const area = document.createElement('textarea');
+            area.value = text;
+            area.setAttribute('readonly', '');
+            area.style.position = 'fixed';
+            area.style.opacity = '0';
+            document.body.appendChild(area);
+            area.select();
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+            area.remove();
+            if (!ok && navigator.clipboard) {
+                navigator.clipboard.writeText(text).catch(() => { });
+                ok = true;
+            }
+            return ok;
         }
 
         document.getElementById("prevMonthBtn").addEventListener("click", () => {
@@ -914,11 +1050,12 @@
         function openSidebar() {
             sidebar.classList.add("active");
             overlay.classList.add("active");
-            document.getElementById("sessionDetails").innerHTML = `<div class="no-selection" id="sidebarHelperText">${isDevopsMode ? 'Click link to view event.' : '👈 Натисни на золоту дату, щоб побачити деталі сесії'}</div>`;
+            document.getElementById("sessionDetails").innerHTML = `<div class="no-selection" id="sidebarHelperText">${isDevopsMode ? 'Click any date to view or add event.' : '👈 Натисни на дату: золота — гра, червона — хтось не може, будь-яка — додати подію'}</div>`;
 
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const nextGame = allSessions.find(s => s.dateObj >= today);
+            const nextGame = allSessions.find(s => s.dateObj >= today && !s.blocked)
+                || allSessions.find(s => s.dateObj >= today);
             if (nextGame) {
                 currentCalDate = new Date(nextGame.dateObj);
                 buildVisualCalendar();
@@ -949,7 +1086,7 @@
                 document.getElementById("sidebarTitle").textContent = "Calendar Applet v1.0";
                 document.getElementById("calHeader").textContent = "Upcoming Events List";
                 if (document.getElementById("sidebarHelperText")) {
-                    document.getElementById("sidebarHelperText").textContent = "Click link to view event.";
+                    document.getElementById("sidebarHelperText").textContent = "Click any date to view or add event.";
                 }
             } else {
                 // Повертаємо магію
@@ -959,7 +1096,7 @@
                 document.getElementById("sidebarTitle").textContent = "🗺️ Карта подій";
                 document.getElementById("calHeader").textContent = "📅 Найближчі плани";
                 if (document.getElementById("sidebarHelperText")) {
-                    document.getElementById("sidebarHelperText").textContent = "👈 Натисни на золоту дату, щоб побачити деталі сесії";
+                    document.getElementById("sidebarHelperText").textContent = "👈 Натисни на дату: золота — гра, червона — хтось не може, будь-яка — додати подію";
                 }
             }
 
